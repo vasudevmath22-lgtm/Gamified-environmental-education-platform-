@@ -1,0 +1,4334 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoQuest Education Platform</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1a202c;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 2rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .logo-text h1 {
+      font-size: 1.5rem;
+      color: #2d3748;
+      font-weight: 700;
+    }
+
+    .logo-text p {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    .nav-section {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .user-info:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .user-badge {
+      font-size: 1.5rem;
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name-display {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 0.875rem;
+    }
+
+    .user-type-badge {
+      font-size: 0.75rem;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .user-points-display {
+      font-size: 0.875rem;
+      color: #48bb78;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .points-animated {
+      animation: pointsGain 0.5s ease-out;
+    }
+
+    @keyframes pointsGain {
+      0% { transform: scale(1); color: #48bb78; }
+      50% { transform: scale(1.3); color: #38a169; }
+      100% { transform: scale(1); color: #48bb78; }
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(245, 101, 101, 0.3);
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+    }
+
+    /* Login Selection Screen */
+    .login-selection {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80%;
+      padding: 2rem;
+    }
+
+    .login-options {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+    }
+
+    .login-option-card {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      min-width: 300px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-option-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .login-option-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .login-option-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .login-option-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+
+    .login-option-card:hover .login-option-icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .login-option-card h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.75rem;
+    }
+
+    .login-option-card p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    .select-btn {
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .select-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Auth Container */
+    .auth-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      min-height: 80%;
+      padding: 2rem;
+    }
+
+    .auth-container.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .auth-form {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.75rem;
+      background: #f7fafc;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #718096;
+      transition: all 0.3s;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .back-btn {
+      width: 100%;
+      background: #718096;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #4a5568;
+      transform: translateY(-2px);
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem 2rem 2rem;
+    }
+
+    .dashboard.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .dashboard-header {
+      background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-header h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .dashboard-header p {
+      color: #718096;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #718096;
+      margin-top: 0.25rem;
+    }
+
+    .dashboard-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-tab {
+      padding: 0.75rem 1.5rem;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #718096;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .dashboard-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .dashboard-tab.active::after {
+      transform: scaleX(1);
+    }
+
+    .dashboard-tab.active {
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      background: #e2e8f0;
+      border-radius: 20px;
+      height: 8px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #48bb78, #38a169);
+      border-radius: 20px;
+      transition: width 0.5s ease-out;
+    }
+
+    /* Challenges Grid */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .challenge-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .challenge-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .challenge-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .challenge-card.completed {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    }
+
+    .challenge-card.completed::after {
+      content: '✓';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+      animation: checkmark 0.5s ease-in-out;
+    }
+
+    @keyframes checkmark {
+      0% { transform: scale(0) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(180deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+
+    .challenge-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+
+    .challenge-card:hover .challenge-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .challenge-card h3 {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-card p {
+      color: #718096;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .challenge-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .points-badge {
+      background: linear-gradient(135deg, #fef5e7 0%, #fde9c4 100%);
+      color: #f59e0b;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+    }
+
+    .difficulty {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    /* Tasks Section */
+    .task-creator {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .task-creator h3 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .task-item {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      border-left: 4px solid #667eea;
+      transition: all 0.3s;
+    }
+
+    .task-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+
+    .task-item.completed {
+      border-left-color: #48bb78;
+      background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 0.75rem;
+      gap: 1rem;
+    }
+
+    .task-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #2d3748;
+      flex: 1;
+    }
+
+    .task-status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .task-status-badge.pending {
+      background: linear-gradient(135deg, #fef5e7 0%, #fde9c4 100%);
+      color: #f59e0b;
+    }
+
+    .task-status-badge.completed {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      color: #155724;
+    }
+
+    .task-status-badge.open {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      color: #0369a1;
+    }
+
+    .task-description {
+      color: #718096;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .task-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: #718096;
+      flex-wrap: wrap;
+    }
+
+    .complete-task-btn {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+    }
+
+    .complete-task-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+    }
+
+    .complete-task-btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .upload-task-btn {
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .upload-task-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .approve-btn {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      margin-right: 0.5rem;
+      box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+    }
+
+    .approve-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+    }
+
+    .reject-btn {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(245, 101, 101, 0.3);
+    }
+
+    .reject-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+    }
+
+    .task-submission {
+      background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .submission-photo {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      margin: 1rem 0;
+      display: block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .submission-info {
+      font-size: 0.875rem;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+      color: #2d3748;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #718096;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .close-modal:hover {
+      background: #f7fafc;
+      transform: rotate(90deg);
+    }
+
+    /* Quiz Styles */
+    .quiz-question {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .quiz-question:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .question-text {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .quiz-option {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+    }
+
+    .quiz-option:hover {
+      border-color: #667eea;
+      background: #f7fafc;
+      transform: translateX(5px);
+    }
+
+    .quiz-option input[type="radio"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+      margin-top: 0.125rem;
+      flex-shrink: 0;
+      accent-color: #667eea;
+    }
+
+    .quiz-option span {
+      line-height: 1.5;
+    }
+
+    .quiz-option.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #edf2f7 0%, #e6f2ff 100%);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .quiz-result {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .quiz-result-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: bounce 1s ease-in-out;
+    }
+
+    .quiz-result h3 {
+      color: #2d3748;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-result p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-score {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 1rem 0;
+    }
+
+    .explanation-section {
+      background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+      border-left: 4px solid #38b2ac;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .explanation-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explanation-text {
+      color: #4a5568;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* Leaderboard */
+    .leaderboard-container {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .leaderboard-list {
+      list-style: none;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      transition: all 0.3s;
+    }
+
+    .leaderboard-item:hover {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      transform: translateX(5px);
+    }
+
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .leaderboard-item:nth-child(1) .rank {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .leaderboard-item:nth-child(2) .rank {
+      background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .leaderboard-item:nth-child(3) .rank {
+      background: linear-gradient(135deg, #cd7f32 0%, #e8a87c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .rank {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+      min-width: 3rem;
+    }
+
+    .user-info-item {
+      flex: 1;
+      margin-left: 1rem;
+    }
+
+    .user-name-item {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .user-institution {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    .user-points {
+      font-weight: 700;
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.125rem;
+    }
+
+    /* Suggestions */
+    .suggestions-container {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .suggestion-form {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .suggestion-item {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .suggestion-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .suggestion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 0.75rem;
+      gap: 1rem;
+    }
+
+    .suggestion-category {
+      background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .suggestion-text {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .suggestion-meta {
+      font-size: 0.75rem;
+      color: #718096;
+    }
+
+    /* Rating Buttons */
+    .rating-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0.3;
+      padding: 0.5rem;
+      filter: grayscale(100%);
+    }
+
+    .rating-btn:hover {
+      transform: scale(1.2);
+      opacity: 0.6;
+      filter: grayscale(0%);
+    }
+
+    .rating-btn.selected {
+      opacity: 1;
+      transform: scale(1.1);
+      filter: grayscale(0%);
+      animation: starPulse 0.3s ease-out;
+    }
+
+    @keyframes starPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 1001;
+      animation: slideIn 0.3s ease;
+      max-width: 400px;
+    }
+
+    .toast.active {
+      display: block;
+    }
+
+    .toast.success {
+      border-left: 4px solid #48bb78;
+    }
+
+    .toast.error {
+      border-left: 4px solid #f56565;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Filter Controls */
+    .filter-controls {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-controls label {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 0.875rem;
+    }
+
+    .filter-controls select {
+      padding: 0.5rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-controls select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Responsive Design for All Devices */
+    
+    /* Mobile Phones (Portrait) - 320px to 480px */
+    @media (max-width: 480px) {
+      html {
+        font-size: 14px;
+      }
+
+      .header {
+        padding: 1rem;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .logo-text h1 {
+        font-size: 1.125rem;
+      }
+
+      .logo-text p {
+        font-size: 0.75rem;
+      }
+
+      .nav-section {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .user-info {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem;
+      }
+
+      .logout-btn {
+        width: 100%;
+        padding: 0.75rem;
+      }
+
+      .login-selection {
+        padding: 1rem;
+        min-height: auto;
+      }
+
+      .login-options {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .login-option-card {
+        min-width: auto;
+        width: 100%;
+        padding: 2rem 1.5rem;
+      }
+
+      .login-option-icon {
+        font-size: 3.5rem;
+      }
+
+      .login-option-card h2 {
+        font-size: 1.5rem;
+      }
+
+      .auth-container {
+        padding: 1rem;
+      }
+
+      .auth-form {
+        padding: 1.5rem;
+      }
+
+      .auth-header-icon {
+        font-size: 2.5rem;
+      }
+
+      .dashboard {
+        padding: 0 1rem 1rem 1rem;
+      }
+
+      .dashboard-header {
+        padding: 1.5rem 1rem;
+      }
+
+      .dashboard-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .stats-container {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .stat-card {
+        padding: 1rem;
+      }
+
+      .dashboard-tabs {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .dashboard-tab {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        text-align: center;
+      }
+
+      .challenge-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .challenge-card {
+        padding: 1.25rem;
+      }
+
+      .challenge-icon {
+        font-size: 2.5rem;
+      }
+
+      .challenge-card h3 {
+        font-size: 1.125rem;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .filter-controls select {
+        width: 100%;
+      }
+
+      .search-box {
+        width: 100%;
+        min-width: auto;
+      }
+
+      .task-creator {
+        padding: 1.25rem;
+      }
+
+      .task-item {
+        padding: 1rem;
+      }
+
+      .task-header {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+      }
+
+      .task-footer {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .task-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+      }
+
+      .complete-task-btn,
+      .upload-task-btn,
+      .approve-btn,
+      .reject-btn {
+        width: 100%;
+      }
+
+      .modal-content {
+        padding: 1rem;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 12px 12px 0 0;
+        max-height: 85%;
+      }
+
+      .modal-header h3 {
+        font-size: 1.25rem;
+      }
+
+      .quiz-question {
+        padding: 1rem;
+      }
+
+      .question-text {
+        font-size: 1rem;
+      }
+
+      .quiz-option {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .leaderboard-item {
+        flex-wrap: wrap;
+        padding: 0.875rem;
+      }
+
+      .rank {
+        font-size: 1.25rem;
+        min-width: 2rem;
+      }
+
+      .user-info-item {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .toast {
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+      }
+
+      .rating-btn {
+        font-size: 1.5rem;
+        padding: 0.25rem;
+      }
+
+      .suggestion-item,
+      .suggestions-container,
+      .leaderboard-container {
+        padding: 1rem;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+    }
+
+    /* Mobile Phones (Landscape) and Small Tablets - 481px to 767px */
+    @media (min-width: 481px) and (max-width: 767px) {
+      .login-options {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .login-option-card {
+        min-width: 280px;
+        flex: 1;
+        max-width: 350px;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .challenge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+
+      .dashboard-tabs {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .dashboard-tab {
+        flex: 1;
+        min-width: 140px;
+      }
+
+      .task-footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .task-meta {
+        flex-wrap: wrap;
+      }
+
+      .modal-content {
+        max-width: 90%;
+        padding: 2rem;
+      }
+    }
+
+    /* Tablets - 768px to 1024px */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .header-content {
+        padding: 0 1rem;
+      }
+
+      .login-options {
+        gap: 1.5rem;
+      }
+
+      .login-option-card {
+        min-width: 280px;
+        max-width: 320px;
+      }
+
+      .dashboard {
+        max-width: 100%;
+        padding: 0 1.5rem 2rem 1.5rem;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .challenge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+
+      .modal-content {
+        max-width: 85%;
+      }
+
+      .quiz-question {
+        padding: 1.25rem;
+      }
+    }
+
+    /* Large Tablets and Small Laptops - 1025px to 1366px */
+    @media (min-width: 1025px) and (max-width: 1366px) {
+      .header-content {
+        max-width: 100%;
+        padding: 0 2rem;
+      }
+
+      .dashboard {
+        max-width: 1100px;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .challenge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+
+      .login-option-card {
+        min-width: 320px;
+      }
+
+      .modal-content {
+        max-width: 750px;
+      }
+    }
+
+    /* Desktop and Large Screens - 1367px and above */
+    @media (min-width: 1367px) {
+      .header-content {
+        max-width: 1400px;
+      }
+
+      .dashboard {
+        max-width: 1400px;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .challenge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+      }
+
+      .modal-content {
+        max-width: 850px;
+      }
+
+      .login-options {
+        max-width: 1000px;
+      }
+    }
+
+    /* Very Large Screens - 1920px and above */
+    @media (min-width: 1920px) {
+      html {
+        font-size: 18px;
+      }
+
+      .header-content {
+        max-width: 1600px;
+      }
+
+      .dashboard {
+        max-width: 1600px;
+      }
+
+      .challenge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      }
+    }
+
+    /* Touch Device Optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .dashboard-tab,
+      .select-btn,
+      .submit-btn,
+      .auth-tab,
+      .complete-task-btn,
+      .upload-task-btn,
+      .approve-btn,
+      .reject-btn,
+      .logout-btn,
+      .back-btn {
+        min-height: 44px; /* iOS recommended touch target */
+        touch-action: manipulation; /* Prevents double-tap zoom */
+      }
+
+      .challenge-card,
+      .task-item,
+      .leaderboard-item,
+      .quiz-option {
+        -webkit-tap-highlight-color: rgba(102, 126, 234, 0.1);
+      }
+
+      .modal-overlay {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
+    /* High DPI / Retina Displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .challenge-card,
+      .task-item,
+      .stat-card,
+      .auth-form,
+      .modal-content {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.05);
+      }
+    }
+
+    /* Landscape Mode Specific Adjustments */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .login-selection {
+        padding: 1rem;
+        min-height: auto;
+      }
+
+      .login-option-card {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .login-option-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .auth-header-icon {
+        font-size: 2rem;
+      }
+
+      .modal-content {
+        max-height: 95%;
+        padding: 1.25rem;
+      }
+
+      .dashboard-header {
+        padding: 1.25rem;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      .header,
+      .nav-section,
+      .dashboard-tabs,
+      .filter-controls,
+      .logout-btn,
+      .back-btn,
+      .submit-btn,
+      .complete-task-btn,
+      .upload-task-btn,
+      .approve-btn,
+      .reject-btn,
+      .toast,
+      .modal-overlay {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .dashboard {
+        max-width: 100%;
+      }
+
+      .challenge-card,
+      .task-item {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper"><!-- Header -->
+   <header class="header">
+    <div class="header-content">
+     <div class="logo-section">
+      <div class="logo">
+       🌍🌱
+      </div>
+      <div class="logo-text">
+       <h1>EcoQuest Education Platform</h1>
+       <p>Learn, Play, Save the Planet</p>
+      </div>
+     </div>
+     <nav class="nav-section" id="nav-section" style="display: none;">
+      <div class="user-info"><span class="user-badge" id="user-badge">🎓</span>
+       <div class="user-details"><span class="user-name-display" id="user-name-display"></span> <span class="user-type-badge" id="user-type-display"></span> <span class="user-points-display" id="user-points-display">0 pts</span>
+       </div>
+      </div><button class="logout-btn" id="logout-btn">Logout</button>
+     </nav>
+    </div>
+   </header><!-- Login Selection Screen -->
+   <section class="login-selection" id="login-selection">
+    <div class="login-options">
+     <div class="login-option-card">
+      <div class="login-option-icon">
+       🎓
+      </div>
+      <h2>Student Login</h2>
+      <p>Access challenges, earn points, and track your progress</p><button class="select-btn" id="student-btn">Continue as Student</button>
+     </div>
+     <div class="login-option-card">
+      <div class="login-option-icon">
+       👨‍🏫
+      </div>
+      <h2>Teacher Login</h2>
+      <p>Manage tasks, review progress, and guide students</p><button class="select-btn" id="teacher-btn">Continue as Teacher</button>
+     </div>
+    </div>
+   </section><!-- Auth Container -->
+   <section class="auth-container" id="auth-container">
+    <div class="auth-form">
+     <div class="auth-header">
+      <div class="auth-header-icon" id="auth-icon">
+       🎓
+      </div>
+      <h2 id="auth-title">Student Access</h2>
+     </div>
+     <div class="auth-tabs"><button class="auth-tab active" id="login-tab">Login</button> <button class="auth-tab" id="register-tab">Register</button>
+     </div><!-- Login Form -->
+     <form id="login-form">
+      <div class="form-group"><label for="login-email">Email</label> <input type="email" id="login-email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group"><label for="login-password">Password</label> <input type="password" id="login-password" placeholder="Enter your password" required>
+      </div>
+      <div style="text-align: right; margin-bottom: 1rem;"><button type="button" class="forgot-password-btn" id="forgot-password-btn" style="background: none; border: none; color: #667eea; font-weight: 600; cursor: pointer; font-size: 0.875rem; text-decoration: underline;">Forgot Password?</button>
+      </div><button type="submit" class="submit-btn" id="login-submit-btn">Login</button>
+     </form><!-- Register Form -->
+     <form id="register-form" style="display: none;">
+      <div class="form-group"><label for="register-name">Full Name</label> <input type="text" id="register-name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group"><label for="register-email">Email</label> <input type="email" id="register-email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group"><label for="register-password">Password</label> <input type="password" id="register-password" placeholder="Create a password" required>
+      </div>
+      <div class="form-group"><label for="register-institution">Institution</label> <input type="text" id="register-institution" placeholder="Enter your school/college name" required>
+      </div>
+      <div class="form-group"><label for="register-security-answer">Security Question: What is your favorite color?</label> <input type="text" id="register-security-answer" placeholder="Answer for password recovery" required>
+       <p style="font-size: 0.75rem; color: #718096; margin-top: 0.25rem;">This will help you recover your password if you forget it</p>
+      </div><button type="submit" class="submit-btn" id="register-submit-btn">Register</button>
+     </form><button class="back-btn" id="back-to-selection-btn">← Back to Selection</button>
+    </div>
+   </section><!-- Dashboard -->
+   <section class="dashboard" id="dashboard">
+    <div class="dashboard-header">
+     <h2 id="welcome-heading">Welcome back!</h2>
+     <p id="welcome-message">Continue your environmental learning journey</p><!-- Stats Container -->
+     <div class="stats-container" id="stats-container" style="display: none;"><!-- Stats will be dynamically inserted -->
+     </div>
+    </div>
+    <div class="dashboard-tabs" id="dashboard-tabs-container"><button class="dashboard-tab active" id="challenges-tab-btn">🎯 Challenges</button> <button class="dashboard-tab" id="tasks-tab-btn">📋 Tasks</button> <button class="dashboard-tab" id="leaderboard-tab-btn">🏆 Leaderboard</button> <button class="dashboard-tab" id="suggestions-tab-btn">💡 Suggestions</button> <button class="dashboard-tab" id="feedback-tab-btn">📢 Feedback</button>
+    </div><!-- Challenges Tab -->
+    <div class="tab-content active" id="challenges-tab"><!-- Filter Controls -->
+     <div class="filter-controls"><label for="difficulty-filter">Filter by Difficulty:</label> <select id="difficulty-filter"> <option value="all">All Difficulties</option> <option value="Beginner">⭐ Beginner</option> <option value="Intermediate">    ⭐ Intermediate</option> <option value="Advanced">⭐⭐⭐ Advanced</option> </select>
+      <div class="search-box"><input type="text" id="challenge-search" placeholder="🔍 Search challenges...">
+      </div>
+     </div>
+     <div class="challenge-grid" id="challenge-grid">
+      <div class="challenge-card" data-challenge="carbon" data-points="150" data-difficulty="Intermediate">
+       <div class="challenge-icon">
+        👣
+       </div>
+       <h3>Carbon Footprint Calculator</h3>
+       <p>Learn about your environmental impact and how to reduce greenhouse gas emissions</p>
+       <div class="challenge-meta"><span class="points-badge">+150 pts</span> <span class="difficulty">⭐⭐ Intermediate</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="water" data-points="100" data-difficulty="Beginner">
+       <div class="challenge-icon">
+        💧
+       </div>
+       <h3>Water Cycle Master</h3>
+       <p>Explore the continuous movement of water through evaporation, condensation, and precipitation</p>
+       <div class="challenge-meta"><span class="points-badge">+100 pts</span> <span class="difficulty">⭐ Beginner</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="energy" data-points="200" data-difficulty="Advanced">
+       <div class="challenge-icon">
+        ⚡
+       </div>
+       <h3>Renewable Energy Quest</h3>
+       <p>Discover clean, sustainable energy sources like solar, wind, and hydroelectric power</p>
+       <div class="challenge-meta"><span class="points-badge">+200 pts</span> <span class="difficulty">⭐⭐⭐ Advanced</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="biodiversity" data-points="120" data-difficulty="Intermediate">
+       <div class="challenge-icon">
+        🦋
+       </div>
+       <h3>Biodiversity Explorer</h3>
+       <p>Journey through Earth's incredible variety of life and learn about conservation</p>
+       <div class="challenge-meta"><span class="points-badge">+120 pts</span> <span class="difficulty">⭐⭐ Intermediate</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="recycling" data-points="80" data-difficulty="Beginner">
+       <div class="challenge-icon">
+        ♻️
+       </div>
+       <h3>Recycling Champion</h3>
+       <p>Master waste management, sorting techniques, and the benefits of recycling</p>
+       <div class="challenge-meta"><span class="points-badge">+80 pts</span> <span class="difficulty">⭐ Beginner</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="climate" data-points="180" data-difficulty="Advanced">
+       <div class="challenge-icon">
+        🌡️
+       </div>
+       <h3>Climate Change Quiz</h3>
+       <p>Understand global warming science and learn actions to combat climate change</p>
+       <div class="challenge-meta"><span class="points-badge">+180 pts</span> <span class="difficulty">⭐⭐⭐ Advanced</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="ocean" data-points="140" data-difficulty="Intermediate">
+       <div class="challenge-icon">
+        🌊
+       </div>
+       <h3>Ocean Conservation</h3>
+       <p>Dive deep into marine ecosystems and discover how to protect our blue planet</p>
+       <div class="challenge-meta"><span class="points-badge">+140 pts</span> <span class="difficulty">⭐⭐ Intermediate</span>
+       </div>
+      </div>
+      <div class="challenge-card" data-challenge="forest" data-points="160" data-difficulty="Intermediate">
+       <div class="challenge-icon">
+        🌳
+       </div>
+       <h3>Forest Guardian</h3>
+       <p>Explore forests as Earth's lungs and learn about conservation efforts</p>
+       <div class="challenge-meta"><span class="points-badge">+160 pts</span> <span class="difficulty">⭐⭐ Intermediate</span>
+       </div>
+      </div>
+     </div>
+    </div><!-- Tasks Tab -->
+    <div class="tab-content" id="tasks-tab"><!-- Teacher Task Creator -->
+     <div class="task-creator" id="task-creator" style="display: none;">
+      <h3>Create New Task</h3>
+      <form id="task-form">
+       <div class="form-group"><label for="task-title">Task Title</label> <input type="text" id="task-title" placeholder="Enter task title" required>
+       </div>
+       <div class="form-group"><label for="task-description">Description</label> <textarea id="task-description" rows="3" placeholder="Describe the task" required></textarea>
+       </div>
+       <div class="form-group"><label for="task-points">Points</label> <input type="number" id="task-points" placeholder="Enter points" min="10" max="500" required>
+       </div>
+       <div class="form-group"><label for="task-difficulty">Difficulty</label> <select id="task-difficulty" required> <option value="">Select difficulty</option> <option value="Beginner">⭐ Beginner</option> <option value="Intermediate">⭐⭐ Intermediate</option> <option value="Advanced">⭐⭐⭐ Advanced</option> </select>
+       </div>
+       <div class="form-group"><label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"> <input type="checkbox" id="task-requires-photo" style="width: auto;"> <span>Requires Photo Proof</span> </label>
+       </div><button type="submit" class="submit-btn" id="task-submit-btn">Create Task</button>
+      </form>
+     </div><!-- Filter for Tasks -->
+     <div class="filter-controls" id="task-filters" style="display: none;"><label for="task-status-filter">Filter by Status:</label> <select id="task-status-filter"> <option value="all">All Tasks</option> <option value="open">Open Tasks</option> <option value="pending">Pending Approval</option> <option value="completed">Completed Tasks</option> </select>
+     </div><!-- Tasks List -->
+     <div class="task-list" id="task-list">
+      <p style="text-align: center; color: #718096; padding: 2rem;">No tasks available yet</p>
+     </div>
+    </div><!-- Leaderboard Tab -->
+    <div class="tab-content" id="leaderboard-tab">
+     <div class="leaderboard-container">
+      <h3 style="text-align: center; margin-bottom: 1.5rem; color: #2d3748;">🏆 Top EcoWarriors</h3>
+      <ul class="leaderboard-list" id="leaderboard-list">
+       <li style="text-align: center; color: #718096; padding: 2rem;">Loading leaderboard...</li>
+      </ul>
+     </div>
+    </div><!-- Approvals Tab (Teacher Only) -->
+    <div class="tab-content" id="approvals-tab">
+     <div class="task-list" id="approvals-list">
+      <p style="text-align: center; color: #718096; padding: 2rem;">No pending submissions</p>
+     </div>
+    </div><!-- Suggestions Tab -->
+    <div class="tab-content" id="suggestions-tab">
+     <div class="suggestions-container">
+      <div class="suggestion-form">
+       <h3 style="margin-bottom: 1.5rem; color: #2d3748;">💡 Submit a Suggestion</h3>
+       <form id="suggestion-form">
+        <div class="form-group"><label for="suggestion-category">Category</label> <select id="suggestion-category" required> <option value="">Select a category</option> <option value="New Challenge">New Challenge Idea</option> <option value="Platform Feature">Platform Feature</option> <option value="Content Improvement">Content Improvement</option> <option value="Bug Report">Bug Report</option> <option value="Other">Other</option> </select>
+        </div>
+        <div class="form-group"><label for="suggestion-text">Your Suggestion</label> <textarea id="suggestion-text" rows="4" placeholder="Share your ideas to improve our platform..." required></textarea>
+        </div><button type="submit" class="submit-btn" id="suggestion-submit-btn">Submit Suggestion</button>
+       </form>
+      </div>
+      <h3 style="margin-bottom: 1rem; color: #2d3748;">Recent Suggestions</h3>
+      <div id="suggestions-list">
+       <p style="text-align: center; color: #718096; padding: 2rem;">No suggestions yet. Be the first!</p>
+      </div>
+     </div>
+    </div><!-- Feedback Tab -->
+    <div class="tab-content" id="feedback-tab">
+     <div class="suggestions-container">
+      <div class="suggestion-form">
+       <h3 style="margin-bottom: 1.5rem; color: #2d3748;">📢 Share Your Feedback</h3>
+       <p style="color: #718096; margin-bottom: 1.5rem; font-size: 0.875rem;">Help us improve EcoQuest by sharing your experience and suggestions.</p>
+       <form id="feedback-form">
+        <div class="form-group"><label for="feedback-type">Feedback Type</label> <select id="feedback-type" required> <option value="">Select feedback type</option> <option value="Feature Request">Feature Request</option> <option value="User Experience">User Experience</option> <option value="Content Quality">Content Quality</option> <option value="Technical Issue">Technical Issue</option> <option value="General Feedback">General Feedback</option> <option value="Compliment">Compliment</option> </select>
+        </div>
+        <div class="form-group"><label for="feedback-rating">Overall Experience Rating</label>
+         <div style="display: flex; gap: 0.5rem; justify-content: center; padding: 1rem 0;"><button type="button" class="rating-btn" data-rating="1">⭐</button> <button type="button" class="rating-btn" data-rating="2">⭐</button> <button type="button" class="rating-btn" data-rating="3">⭐</button> <button type="button" class="rating-btn" data-rating="4">⭐</button> <button type="button" class="rating-btn" data-rating="5">⭐</button>
+         </div><input type="hidden" id="feedback-rating" required>
+        </div>
+        <div class="form-group"><label for="feedback-message">Your Feedback</label> <textarea id="feedback-message" rows="5" placeholder="Tell us what you think about EcoQuest..." required></textarea>
+        </div>
+        <div class="form-group"><label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;"> <input type="checkbox" id="feedback-anonymous" style="width: auto;"> <span>Submit anonymously</span> </label>
+        </div><button type="submit" class="submit-btn" id="feedback-submit-btn">Submit Feedback</button>
+       </form>
+      </div>
+      <h3 style="margin-bottom: 1rem; color: #2d3748;">Recent Feedback</h3>
+      <div id="feedback-list">
+       <p style="text-align: center; color: #718096; padding: 2rem;">No feedback yet. Be the first to share!</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Toast Notification -->
+   <div class="toast" id="toast"></div><!-- Password Reset Modal -->
+   <div class="modal-overlay" id="password-reset-modal">
+    <div class="modal-content" style="max-width: 500px;">
+     <div class="modal-header">
+      <h3>Reset Password</h3><button class="close-modal" id="close-password-reset-modal">×</button>
+     </div>
+     <form id="password-reset-form">
+      <div class="form-group"><label for="reset-email">Email Address</label> <input type="email" id="reset-email" placeholder="Enter your registered email" required>
+      </div>
+      <div class="form-group"><label for="reset-security-answer">Security Question: What is your favorite color?</label> <input type="text" id="reset-security-answer" placeholder="Enter your answer" required>
+      </div>
+      <div class="form-group" id="new-password-group" style="display: none;"><label for="reset-new-password">New Password</label> <input type="password" id="reset-new-password" placeholder="Enter new password (min 6 characters)" minlength="6">
+      </div>
+      <div class="form-group" id="confirm-password-group" style="display: none;"><label for="reset-confirm-password">Confirm New Password</label> <input type="password" id="reset-confirm-password" placeholder="Confirm new password" minlength="6">
+      </div><button type="submit" class="submit-btn" id="password-reset-submit-btn">Verify Identity</button>
+     </form>
+    </div>
+   </div><!-- Upload Modal -->
+   <div class="modal-overlay" id="upload-modal">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h3>Submit Task Completion</h3><button class="close-modal" id="close-upload-modal">×</button>
+     </div>
+     <form id="upload-form">
+      <div class="form-group"><label for="photo-upload">Upload Photo Proof</label> <input type="file" id="photo-upload" accept="image/*" required style="padding: 0.5rem;"> <img id="photo-preview" style="display: none; max-width: 100%; max-height: 300px; margin-top: 1rem; border-radius: 8px;" alt="Preview">
+      </div>
+      <div class="form-group"><label for="submission-comment">Comment (Optional)</label> <textarea id="submission-comment" rows="3" placeholder="Add any notes about your task completion..."></textarea>
+      </div><button type="submit" class="submit-btn" id="upload-submit-btn">Submit for Approval</button>
+     </form>
+    </div>
+   </div><!-- Challenge Quiz Modal -->
+   <div class="modal-overlay" id="challenge-modal">
+    <div class="modal-content" style="max-width: 800px;">
+     <div class="modal-header">
+      <div>
+       <h3 id="challenge-modal-title">Challenge Quiz</h3>
+       <p style="color: #718096; font-size: 0.875rem; margin-top: 0.25rem;" id="challenge-modal-subtitle">Answer correctly to earn points!</p>
+      </div><button class="close-modal" id="close-challenge-modal">×</button>
+     </div>
+     <div id="challenge-quiz-container"><!-- Quiz questions will be dynamically inserted here -->
+     </div>
+     <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 2px solid #e2e8f0; flex-wrap: wrap; gap: 1rem;">
+      <div style="color: #718096; font-size: 0.875rem;"><span id="quiz-progress">Question 1 of 8</span>
+      </div><button class="submit-btn" id="submit-quiz-btn" style="width: auto; padding: 0.75rem 2rem;">Submit Quiz</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Global variables
+    let allRecords = [];
+    let currentUser = null;
+    let currentUserType = null;
+    let currentTaskId = null;
+    let currentChallenge = null;
+    let quizAnswers = {};
+    let completedChallenges = new Set();
+
+    // Challenge Quiz Data
+    const challengeQuizzes = {
+      carbon: {
+        title: '👣 Carbon Footprint Calculator',
+        points: 150,
+        questions: [
+          {
+            question: 'What is a carbon footprint?',
+            options: [
+              'The size of your shoe print in carbon',
+              'The total amount of greenhouse gases produced by human activities',
+              'A type of recycling program',
+              'Energy produced from solar panels'
+            ],
+            correct: 1,
+            explanation: 'A carbon footprint is the total amount of greenhouse gases (especially CO2) released into the atmosphere as a result of the actions of an individual, organization, or community.'
+          },
+          {
+            question: 'Which everyday activity produces the MOST carbon emissions per person?',
+            options: [
+              'Walking 5 kilometers to school',
+              'Taking a 2-hour international plane flight',
+              'Riding a bicycle for 10 kilometers',
+              'Using a city bus for daily commute'
+            ],
+            correct: 1,
+            explanation: 'Air travel is one of the most carbon-intensive activities. A single long-haul flight can emit more CO2 than many people produce in an entire year from other activities.'
+          },
+          {
+            question: 'How can you effectively reduce your carbon footprint at home?',
+            options: [
+              'Use single-use plastic bags for all shopping',
+              'Leave all lights and electronics on 24/7',
+              'Switch to renewable energy and improve home insulation',
+              'Drive alone to all destinations instead of carpooling'
+            ],
+            correct: 2,
+            explanation: 'Using renewable energy (like solar panels) and improving home insulation significantly reduces energy consumption and carbon emissions. Small changes like LED bulbs and unplugging devices also help.'
+          },
+          {
+            question: 'Which greenhouse gas is the PRIMARY contributor to your carbon footprint?',
+            options: [
+              'Oxygen (O2)',
+              'Nitrogen (N2)',
+              'Carbon Dioxide (CO2)',
+              'Hydrogen (H2)'
+            ],
+            correct: 2,
+            explanation: 'Carbon dioxide (CO2) is the primary greenhouse gas emitted through human activities, particularly from burning fossil fuels for electricity, heat, and transportation.'
+          },
+          {
+            question: 'Approximately what percentage of global greenhouse gas emissions come from the transportation sector?',
+            options: [
+              'About 5% - minimal impact',
+              'About 14% - moderate impact',
+              'About 24% - significant impact',
+              'About 50% - majority of emissions'
+            ],
+            correct: 2,
+            explanation: 'Transportation accounts for about 24% of global CO2 emissions, with road vehicles (cars, trucks, buses) being the largest contributors within this sector.'
+          },
+          {
+            question: 'What is the average carbon footprint per person in developed countries?',
+            options: [
+              '1-2 tons of CO2 per year',
+              '4-5 tons of CO2 per year',
+              '10-16 tons of CO2 per year',
+              '25-30 tons of CO2 per year'
+            ],
+            correct: 2,
+            explanation: 'The average person in developed countries produces 10-16 tons of CO2 annually, while the global average is about 4 tons. Scientists recommend reducing this to 2 tons per person to combat climate change.'
+          },
+          {
+            question: 'Which diet choice has the LOWEST carbon footprint?',
+            options: [
+              'Eating beef daily',
+              'Eating chicken and fish regularly',
+              'Plant-based diet with local vegetables',
+              'Processed foods from around the world'
+            ],
+            correct: 2,
+            explanation: 'Plant-based diets have significantly lower carbon footprints. Beef production requires extensive land, water, and feed, producing 10-20 times more emissions than plant proteins.'
+          },
+          {
+            question: 'How much can you reduce your carbon footprint by switching from a gasoline car to an electric vehicle?',
+            options: [
+              'About 5% reduction',
+              'About 20% reduction',
+              'About 50% reduction',
+              'About 90% reduction'
+            ],
+            correct: 2,
+            explanation: 'Electric vehicles can reduce your carbon footprint by about 50% or more, depending on how the electricity is generated. EVs powered by renewable energy are nearly carbon-neutral.'
+          }
+        ]
+      },
+      water: {
+        title: '💧 Water Cycle Master',
+        points: 100,
+        questions: [
+          {
+            question: 'What is the process called when liquid water turns into water vapor?',
+            options: [
+              'Condensation - water vapor turning into liquid',
+              'Precipitation - water falling from clouds',
+              'Evaporation - liquid water becoming vapor',
+              'Collection - water gathering in bodies of water'
+            ],
+            correct: 2,
+            explanation: 'Evaporation is the process where liquid water transforms into water vapor (gas) due to heat energy, primarily from the sun. This is the first major step in the water cycle.'
+          },
+          {
+            question: 'What happens when water vapor rises and cools down in the atmosphere?',
+            options: [
+              'It evaporates further into space',
+              'It condenses into tiny water droplets forming clouds',
+              'It freezes instantly into snow',
+              'It completely disappears'
+            ],
+            correct: 1,
+            explanation: 'When water vapor rises to cooler parts of the atmosphere, it condenses into tiny liquid water droplets that cluster together to form clouds. This process is called condensation.'
+          },
+          {
+            question: 'Which of the following is NOT a form of precipitation?',
+            options: [
+              'Rain - liquid water droplets',
+              'Snow - frozen ice crystals',
+              'Fog - water vapor near ground',
+              'Hail - frozen ice pellets'
+            ],
+            correct: 2,
+            explanation: 'Fog is not precipitation. It is water vapor that has condensed near the ground surface. Precipitation refers to water falling from clouds, including rain, snow, sleet, and hail.'
+          },
+          {
+            question: 'What is the PRIMARY source of energy that drives the entire water cycle?',
+            options: [
+              'The Moon and its gravitational pull',
+              'Wind currents in the atmosphere',
+              'The Sun and its solar energy',
+              'Gravity from Earth\'s core'
+            ],
+            correct: 2,
+            explanation: 'The Sun is the primary energy source for the water cycle. Solar energy heats water in oceans, lakes, and rivers, causing evaporation. It also powers weather systems that move water around the planet.'
+          },
+          {
+            question: 'Where is approximately 68% of Earth\'s freshwater stored?',
+            options: [
+              'Rivers and streams',
+              'Lakes and ponds',
+              'Underground aquifers and groundwater',
+              'Ice caps, glaciers, and permanent snow'
+            ],
+            correct: 3,
+            explanation: 'About 68% of Earth\'s freshwater is frozen in ice caps, glaciers, and permanent snow, mainly in Antarctica and Greenland. Another 30% is groundwater, leaving less than 2% in rivers and lakes.'
+          },
+          {
+            question: 'What is transpiration in the water cycle?',
+            options: [
+              'Water moving through soil layers',
+              'Plants releasing water vapor through their leaves',
+              'Ocean water evaporating into the air',
+              'Rain falling on plant surfaces'
+            ],
+            correct: 1,
+            explanation: 'Transpiration is the process where plants absorb water through their roots and release water vapor through tiny pores in their leaves called stomata. This contributes significantly to atmospheric moisture.'
+          },
+          {
+            question: 'What percentage of Earth\'s water is freshwater suitable for human use?',
+            options: [
+              'About 50% - half of all water',
+              'About 25% - a quarter of water',
+              'About 3% - very limited amount',
+              'About 75% - most of Earth\'s water'
+            ],
+            correct: 2,
+            explanation: 'Only about 3% of Earth\'s water is freshwater, and most of that is frozen in glaciers and ice caps. Less than 1% of Earth\'s water is readily accessible freshwater for human consumption.'
+          },
+          {
+            question: 'How long does the complete water cycle typically take for a single water molecule?',
+            options: [
+              'A few hours to complete one cycle',
+              'Days to thousands of years depending on the path',
+              'Exactly one year for every molecule',
+              'Always less than one month'
+            ],
+            correct: 1,
+            explanation: 'A water molecule can cycle through the atmosphere in about 9 days, but water trapped in glaciers might stay frozen for thousands of years. Groundwater can remain underground for hundreds to thousands of years.'
+          }
+        ]
+      },
+      energy: {
+        title: '⚡ Renewable Energy Quest',
+        points: 200,
+        questions: [
+          {
+            question: 'Which of the following is classified as a renewable energy source?',
+            options: [
+              'Coal - formed from ancient plant matter',
+              'Natural Gas - extracted from underground',
+              'Solar Power - energy from the sun',
+              'Oil - petroleum-based fuel'
+            ],
+            correct: 2,
+            explanation: 'Solar power is renewable because the sun continuously produces energy. Coal, natural gas, and oil are fossil fuels formed over millions of years and cannot be replenished on human timescales.'
+          },
+          {
+            question: 'What does a modern wind turbine primarily produce?',
+            options: [
+              'Drinking water for communities',
+              'Electrical energy for the power grid',
+              'Heat energy only for buildings',
+              'Carbon dioxide as a byproduct'
+            ],
+            correct: 1,
+            explanation: 'Wind turbines convert the kinetic energy of wind into electrical energy. A single large turbine can generate enough electricity to power hundreds of homes without producing emissions.'
+          },
+          {
+            question: 'Which renewable energy source harnesses heat from deep within the Earth?',
+            options: [
+              'Solar energy - from sunlight',
+              'Wind energy - from air movement',
+              'Geothermal energy - from Earth\'s heat',
+              'Hydroelectric - from flowing water'
+            ],
+            correct: 2,
+            explanation: 'Geothermal energy taps into the Earth\'s internal heat, which comes from radioactive decay and residual heat from Earth\'s formation. This heat can generate electricity and provide direct heating.'
+          },
+          {
+            question: 'What is the PRIMARY advantage of renewable energy over fossil fuels?',
+            options: [
+              'It is an inexhaustible resource that naturally replenishes',
+              'It is always the cheapest option available',
+              'It requires no technology or infrastructure',
+              'It only works during nighttime hours'
+            ],
+            correct: 0,
+            explanation: 'Renewable energy sources naturally replenish themselves and won\'t run out. While initial costs can be high, they have no fuel costs and produce little to no greenhouse gas emissions during operation.'
+          },
+          {
+            question: 'Which country generates nearly 100% of its electricity from renewable sources, primarily geothermal and hydroelectric?',
+            options: [
+              'United States',
+              'China',
+              'Iceland',
+              'Japan'
+            ],
+            correct: 2,
+            explanation: 'Iceland generates almost 100% of its electricity from renewable sources: about 75% from hydroelectric power and 25% from geothermal energy, making it one of the greenest countries in energy production.'
+          },
+          {
+            question: 'How do solar panels (photovoltaic cells) generate electricity?',
+            options: [
+              'By burning sunlight as fuel',
+              'By converting light photons directly into electrical current',
+              'By heating water to create steam',
+              'By reflecting sunlight to generators'
+            ],
+            correct: 1,
+            explanation: 'Solar photovoltaic cells use the photoelectric effect to convert light energy directly into electricity. When photons from sunlight hit the solar cell, they knock electrons loose, creating an electric current.'
+          },
+          {
+            question: 'What percentage of global electricity generation comes from renewable sources as of 2023?',
+            options: [
+              'About 10% - very minimal',
+              'About 30% - nearly one-third',
+              'About 55% - more than half',
+              'About 80% - vast majority'
+            ],
+            correct: 1,
+            explanation: 'As of 2023, renewable energy sources account for approximately 30% of global electricity generation, with hydroelectric being the largest contributor, followed by wind and solar power.'
+          },
+          {
+            question: 'Which renewable energy technology has seen the FASTEST cost reduction in the past decade?',
+            options: [
+              'Biomass energy production',
+              'Solar photovoltaic panels',
+              'Traditional hydroelectric dams',
+              'Wave and tidal energy'
+            ],
+            correct: 1,
+            explanation: 'Solar photovoltaic costs have dropped by about 90% over the past decade, making solar power cheaper than fossil fuels in many regions. This dramatic cost reduction has accelerated solar adoption worldwide.'
+          },
+          {
+            question: 'What is "energy storage" and why is it crucial for renewable energy systems?',
+            options: [
+              'Keeping fossil fuels in underground tanks',
+              'Storing excess renewable energy (like in batteries) for use when generation is low',
+              'Building more power plants to store equipment',
+              'Saving money on electricity bills'
+            ],
+            correct: 1,
+            explanation: 'Energy storage systems, like large batteries, store excess electricity generated during sunny or windy periods for use when the sun isn\'t shining or wind isn\'t blowing, solving the intermittency challenge of renewables.'
+          },
+          {
+            question: 'Which renewable energy source currently generates the MOST electricity globally?',
+            options: [
+              'Solar photovoltaic panels',
+              'Wind turbines (onshore and offshore)',
+              'Hydroelectric dams and water power',
+              'Geothermal power plants'
+            ],
+            correct: 2,
+            explanation: 'Hydroelectric power is currently the largest source of renewable electricity globally, providing about 16% of total electricity generation. It has been used for over a century and is very reliable.'
+          }
+        ]
+      },
+      biodiversity: {
+        title: '🦋 Biodiversity Explorer',
+        points: 120,
+        questions: [
+          {
+            question: 'What does the term "biodiversity" specifically mean?',
+            options: [
+              'Only the number of animal species in an area',
+              'The variety of all living organisms including plants, animals, fungi, and microorganisms',
+              'Just the different types of plants',
+              'Different climate zones and weather patterns'
+            ],
+            correct: 1,
+            explanation: 'Biodiversity refers to all the variety of life on Earth at all levels, from genes to ecosystems. It includes diversity within species, between species, and of ecosystems themselves.'
+          },
+          {
+            question: 'Which ecosystem has the HIGHEST biodiversity on Earth?',
+            options: [
+              'Desert ecosystems with cacti and reptiles',
+              'Arctic tundra with polar wildlife',
+              'Tropical rainforests with millions of species',
+              'Grassland savannas with large mammals'
+            ],
+            correct: 2,
+            explanation: 'Tropical rainforests contain more than half of the world\'s plant and animal species despite covering less than 7% of Earth\'s land surface. They are the most biodiverse ecosystems on the planet.'
+          },
+          {
+            question: 'What does it mean when a species is classified as "endangered"?',
+            options: [
+              'The species is very common and widespread',
+              'The species is at serious risk of extinction in the near future',
+              'The species is dangerous to humans',
+              'A completely new species just discovered'
+            ],
+            correct: 1,
+            explanation: 'An endangered species is one that faces a very high risk of extinction in the wild in the near future. The IUCN Red List categories range from Least Concern to Critically Endangered to Extinct.'
+          },
+          {
+            question: 'Why is biodiversity crucial for ecosystem health and human survival?',
+            options: [
+              'It simply makes nature look more attractive',
+              'It maintains ecosystem balance, provides resources, and ensures resilience',
+              'It makes animals and plants happier',
+              'It has no significant importance to humans'
+            ],
+            correct: 1,
+            explanation: 'Biodiversity provides essential ecosystem services: clean air and water, pollination of crops, climate regulation, medicine sources, food security, and ecosystem resilience to environmental changes.'
+          },
+          {
+            question: 'What is the PRIMARY threat to global biodiversity today?',
+            options: [
+              'Too many trees being planted',
+              'Habitat destruction and fragmentation from human activities',
+              'Excessive oxygen in the atmosphere',
+              'Natural animal migration patterns'
+            ],
+            correct: 1,
+            explanation: 'Habitat destruction (deforestation, urbanization, agriculture) is the leading cause of biodiversity loss, affecting 80% of threatened species. Other major threats include climate change, pollution, and invasive species.'
+          },
+          {
+            question: 'Approximately how many species are estimated to exist on Earth?',
+            options: [
+              'About 100,000 species total',
+              'About 500,000 species total',
+              'About 8-9 million species total',
+              'About 50 million species total'
+            ],
+            correct: 2,
+            explanation: 'Scientists estimate there are 8-9 million species on Earth, but only about 1.2 million have been formally described and named. Most undiscovered species are insects, marine organisms, and microorganisms.'
+          },
+          {
+            question: 'What are "keystone species" in an ecosystem?',
+            options: [
+              'The most numerous species in the area',
+              'Species whose presence has a disproportionately large effect on their environment',
+              'The largest animals in the ecosystem',
+              'Species that live near stones and rocks'
+            ],
+            correct: 1,
+            explanation: 'Keystone species have a critical role in maintaining ecosystem structure. Their removal causes dramatic changes throughout the ecosystem. Examples include sea otters, wolves, and beavers.'
+          },
+          {
+            question: 'What is the current rate of species extinction compared to the natural background rate?',
+            options: [
+              'About the same as natural rates',
+              'Slightly higher, about 2 times the natural rate',
+              '100-1,000 times higher than natural background rates',
+              'Lower than natural extinction rates'
+            ],
+            correct: 2,
+            explanation: 'Current extinction rates are estimated to be 100-1,000 times higher than the natural background rate. Scientists call this the sixth mass extinction, primarily driven by human activities.'
+          },
+          {
+            question: 'Which marine ecosystem is often called the "rainforest of the sea" due to its incredible biodiversity?',
+            options: [
+              'Deep ocean trenches',
+              'Coral reef systems',
+              'Open ocean surfaces',
+              'Arctic ice shelves'
+            ],
+            correct: 1,
+            explanation: 'Coral reefs are called "rainforests of the sea" because they support about 25% of all marine species despite covering less than 1% of the ocean floor. They\'re among the most biodiverse ecosystems on Earth.'
+          },
+          {
+            question: 'What is the relationship between biodiversity and ecosystem resilience?',
+            options: [
+              'No relationship exists between them',
+              'Higher biodiversity generally means greater ability to withstand environmental stress',
+              'Lower biodiversity makes ecosystems stronger',
+              'Only species number matters, not variety'
+            ],
+            correct: 1,
+            explanation: 'Greater biodiversity increases ecosystem resilience. Diverse ecosystems can better withstand and recover from disturbances like droughts, diseases, or climate change because multiple species can fill similar roles.'
+          }
+        ]
+      },
+      recycling: {
+        title: '♻️ Recycling Champion',
+        points: 80,
+        questions: [
+          {
+            question: 'What does the universal recycling symbol (three arrows forming a triangle) indicate?',
+            options: [
+              'The item should be thrown in regular trash',
+              'The item can be recycled or contains recycled content',
+              'The item is hazardous and dangerous',
+              'The item is expensive to purchase'
+            ],
+            correct: 1,
+            explanation: 'The three-arrow recycling symbol (Möbius loop) indicates that a material is recyclable or made from recycled materials. However, local recycling rules vary, so check your area\'s specific guidelines.'
+          },
+          {
+            question: 'Which common material takes the LONGEST time to decompose in a landfill?',
+            options: [
+              'Paper products - weeks to months',
+              'Glass bottles - up to 1 million years or never',
+              'Banana peels - 3-4 weeks',
+              'Cotton cloth - 1-5 months'
+            ],
+            correct: 1,
+            explanation: 'Glass can take up to 1 million years to decompose, or may never fully break down. However, glass is 100% recyclable and can be recycled endlessly without loss of quality, making recycling crucial.'
+          },
+          {
+            question: 'What is the BEST environmentally-friendly way to handle food waste?',
+            options: [
+              'Compost it to create nutrient-rich soil',
+              'Burn it to create air pollution',
+              'Bury it sealed in plastic bags',
+              'Leave it on streets for animals'
+            ],
+            correct: 0,
+            explanation: 'Composting food waste creates nutrient-rich soil for gardens, reduces methane emissions from landfills, and returns valuable nutrients to the earth. About 30% of household waste can be composted.'
+          },
+          {
+            question: 'Which item is typically NOT recyclable in most curbside recycling programs?',
+            options: [
+              'Clean cardboard boxes',
+              'Aluminum soda cans',
+              'Pizza boxes with grease stains',
+              'Clean glass bottles'
+            ],
+            correct: 2,
+            explanation: 'Greasy pizza boxes contaminate paper recycling. The grease-free top can often be recycled, but the greasy bottom should be composted or discarded. Food contamination is a major recycling problem.'
+          },
+          {
+            question: 'What is a PRIMARY environmental benefit of recycling?',
+            options: [
+              'It creates more waste than before',
+              'It uses significantly more energy than virgin materials',
+              'It conserves natural resources and reduces pollution',
+              'It provides no real environmental benefits'
+            ],
+            correct: 2,
+            explanation: 'Recycling conserves natural resources (trees, minerals, water), reduces pollution from extracting and processing raw materials, saves energy, and decreases greenhouse gas emissions. Recycling aluminum saves 95% of the energy needed to make new cans.'
+          },
+          {
+            question: 'How many times can aluminum be recycled without losing quality?',
+            options: [
+              'Only once before it degrades',
+              'About 5 times maximum',
+              'Infinitely - it never loses quality',
+              'It cannot be recycled at all'
+            ],
+            correct: 2,
+            explanation: 'Aluminum can be recycled infinitely without any loss in quality. Recycling one aluminum can saves enough energy to power a TV for 3 hours. About 75% of all aluminum ever produced is still in use today.'
+          },
+          {
+            question: 'What does "wishcycling" mean in waste management?',
+            options: [
+              'Hoping your recycling gets processed correctly',
+              'Putting non-recyclable items in recycling bins hoping they\'ll be recycled',
+              'Wishing for better recycling programs',
+              'A new recycling technology'
+            ],
+            correct: 1,
+            explanation: 'Wishcycling is putting questionable items in recycling, hoping they can be recycled. This contaminates entire recycling batches, causing more materials to end up in landfills. When in doubt, check or throw it out.'
+          },
+          {
+            question: 'What percentage of plastic ever produced has been recycled?',
+            options: [
+              'Less than 10% globally',
+              'About 35% globally',
+              'About 60% globally',
+              'More than 80% globally'
+            ],
+            correct: 0,
+            explanation: 'Less than 10% of all plastic ever produced has been recycled. About 12% has been incinerated, and 79% has accumulated in landfills or the environment. This highlights the urgent need for reducing plastic use.'
+          },
+          {
+            question: 'Which recycling concept follows "Reduce, Reuse, Recycle" in order of environmental priority?',
+            options: [
+              'Recycling should always be the first choice',
+              'Reducing consumption is most important, then reusing, then recycling as last resort',
+              'All three are equally important in any order',
+              'Only recycling matters for the environment'
+            ],
+            correct: 1,
+            explanation: 'The waste hierarchy prioritizes: 1) Reduce (use less), 2) Reuse (use again), 3) Recycle (reprocess into new materials). Reducing and reusing require less energy and resources than recycling.'
+          },
+          {
+            question: 'How much energy can be saved by recycling one glass bottle?',
+            options: [
+              'Enough to power a light bulb for 1 minute',
+              'Enough to power a computer for 30 minutes',
+              'Enough to power a 100-watt light bulb for 4 hours',
+              'No energy is saved'
+            ],
+            correct: 2,
+            explanation: 'Recycling one glass bottle saves enough energy to power a 100-watt light bulb for 4 hours. Glass recycling also reduces air pollution by 20% and water pollution by 50% compared to making new glass.'
+          }
+        ]
+      },
+      climate: {
+        title: '🌡️ Climate Change Quiz',
+        points: 180,
+        questions: [
+          {
+            question: 'What is the precise definition of climate change?',
+            options: [
+              'Daily variations in weather conditions',
+              'Long-term shifts in global or regional temperature and weather patterns',
+              'Just the change of seasons throughout the year',
+              'Only the warming of the planet, nothing else'
+            ],
+            correct: 1,
+            explanation: 'Climate change refers to long-term shifts in temperatures and weather patterns over decades or longer. While it includes global warming, it also encompasses changes in precipitation, wind patterns, and extreme weather frequency.'
+          },
+          {
+            question: 'What is the "greenhouse effect" and how does it work?',
+            options: [
+              'Growing plants inside glass greenhouse structures',
+              'Certain atmospheric gases trap heat radiation, warming Earth like a blanket',
+              'Using environmentally-friendly green energy sources',
+              'Painting buildings green to reflect sunlight'
+            ],
+            correct: 1,
+            explanation: 'The greenhouse effect occurs when gases like CO2, methane, and water vapor trap heat in Earth\'s atmosphere. Solar radiation enters but heat cannot easily escape, warming the planet. This natural process is intensified by human emissions.'
+          },
+          {
+            question: 'Which human activity contributes MOST to climate change?',
+            options: [
+              'Planting trees and reforestation',
+              'Burning fossil fuels for energy and transportation',
+              'Installing solar panels on buildings',
+              'Operating wind turbines for electricity'
+            ],
+            correct: 1,
+            explanation: 'Burning fossil fuels (coal, oil, natural gas) for electricity, heat, and transportation is the largest contributor to climate change, producing about 75% of global greenhouse gas emissions and almost all CO2 emissions.'
+          },
+          {
+            question: 'What is a MAJOR documented consequence of climate change?',
+            options: [
+              'More stable and predictable weather patterns',
+              'Cooler ocean temperatures worldwide',
+              'Rising sea levels from melting ice and thermal expansion',
+              'Increasing polar ice caps and glaciers'
+            ],
+            correct: 2,
+            explanation: 'Sea levels have risen about 8-9 inches since 1880, with the rate doubling since 2006. This is caused by melting ice sheets and glaciers, plus thermal expansion as ocean water warms. Coastal cities face increasing flood risks.'
+          },
+          {
+            question: 'How can individuals effectively help combat climate change?',
+            options: [
+              'Increase plastic consumption and waste',
+              'Waste more food and throw away leftovers',
+              'Reduce energy consumption and choose renewable sources',
+              'Drive alone more often instead of carpooling'
+            ],
+            correct: 2,
+            explanation: 'Individual actions matter: reducing energy use, choosing renewable energy, eating less meat, reducing food waste, using public transport, and mindful consumption can significantly lower personal carbon footprints.'
+          },
+          {
+            question: 'How much has Earth\'s average surface temperature increased since pre-industrial times (1850-1900)?',
+            options: [
+              'About 0.2°C - barely noticeable',
+              'About 1.1°C - seemingly small but significant',
+              'About 5°C - dramatic increase',
+              'It has actually decreased'
+            ],
+            correct: 1,
+            explanation: 'Earth has warmed approximately 1.1°C (2°F) since pre-industrial times. This seemingly small increase has already caused significant impacts: extreme weather, melting ice, rising seas, and ecosystem disruption. Every 0.5°C matters enormously.'
+          },
+          {
+            question: 'What is the Paris Agreement\'s main goal regarding global temperature?',
+            options: [
+              'Keep warming under 5°C above pre-industrial levels',
+              'Limit warming to well below 2°C, preferably 1.5°C above pre-industrial levels',
+              'Allow unlimited warming without restrictions',
+              'Return temperatures to 19th century levels'
+            ],
+            correct: 1,
+            explanation: 'The Paris Agreement (2015) aims to limit global warming to well below 2°C, preferably to 1.5°C, compared to pre-industrial levels. Every fraction of a degree matters in preventing catastrophic climate impacts.'
+          },
+          {
+            question: 'Which greenhouse gas is most abundant in Earth\'s atmosphere and contributes significantly to warming?',
+            options: [
+              'Methane (CH4) from agriculture',
+              'Nitrous oxide (N2O) from fertilizers',
+              'Carbon dioxide (CO2) from burning fossil fuels',
+              'Water vapor (H2O) from evaporation'
+            ],
+            correct: 2,
+            explanation: 'While water vapor is the most abundant greenhouse gas naturally, CO2 is the primary human-caused greenhouse gas, responsible for about 76% of total emissions. It stays in the atmosphere for hundreds to thousands of years.'
+          },
+          {
+            question: 'What are "tipping points" in climate science?',
+            options: [
+              'Daily temperature fluctuations',
+              'Thresholds where small changes trigger irreversible, large-scale impacts',
+              'Points where climate immediately fixes itself',
+              'Locations where scientists measure temperature'
+            ],
+            correct: 1,
+            explanation: 'Tipping points are critical thresholds where small temperature increases trigger large, often irreversible changes like Amazon rainforest collapse, ice sheet melting, or ocean circulation shutdown. Scientists warn we\'re approaching several.'
+          },
+          {
+            question: 'How does climate change affect extreme weather events?',
+            options: [
+              'It makes all weather more predictable and mild',
+              'It has no effect on weather patterns',
+              'It increases the frequency and intensity of extreme events like hurricanes and droughts',
+              'It only affects temperature, not weather'
+            ],
+            correct: 2,
+            explanation: 'Climate change increases the frequency, intensity, and duration of extreme weather: stronger hurricanes, more severe droughts, intense heatwaves, and heavier rainfall. Warmer air holds more moisture, and warmer oceans fuel stronger storms.'
+          }
+        ]
+      },
+      ocean: {
+        title: '🌊 Ocean Conservation',
+        points: 140,
+        questions: [
+          {
+            question: 'What percentage of Earth\'s surface is covered by oceans?',
+            options: [
+              'About 30% - less than one-third',
+              'About 50% - exactly half',
+              'About 71% - more than two-thirds',
+              'About 90% - almost all of Earth'
+            ],
+            correct: 2,
+            explanation: 'Oceans cover approximately 71% of Earth\'s surface and contain 97% of Earth\'s water. They produce over 50% of the world\'s oxygen and absorb 25% of all CO2 emissions, making them crucial for life on Earth.'
+          },
+          {
+            question: 'What is ocean acidification and what causes it?',
+            options: [
+              'Oceans becoming saltier from evaporation',
+              'Oceans absorbing atmospheric CO2 and becoming more acidic',
+              'Oceans becoming sweet from melting glaciers',
+              'Oceans losing water volume'
+            ],
+            correct: 1,
+            explanation: 'Ocean acidification occurs when oceans absorb excess CO2 from the atmosphere, forming carbonic acid. This lowers pH levels, making oceans 30% more acidic than pre-industrial times, threatening marine life, especially organisms with shells or skeletons.'
+          },
+          {
+            question: 'What is the BIGGEST threat to coral reef ecosystems?',
+            options: [
+              'Too many fish populations',
+              'Rising ocean temperatures causing coral bleaching',
+              'Excessive oxygen in water',
+              'Moonlight affecting growth'
+            ],
+            correct: 1,
+            explanation: 'Rising ocean temperatures cause coral bleaching, where corals expel the algae living in their tissues, turning white and often dying. Since 2016, half of Australia\'s Great Barrier Reef has died from heat stress. Reefs support 25% of marine life.'
+          },
+          {
+            question: 'What are the effects of plastic pollution on ocean ecosystems?',
+            options: [
+              'It purifies and cleans the water',
+              'It provides shelter for marine life',
+              'It harms, entangles, and kills marine animals while entering food chains',
+              'It has no measurable effect'
+            ],
+            correct: 2,
+            explanation: 'Plastic pollution kills over 100,000 marine mammals and 1 million seabirds annually through entanglement and ingestion. Microplastics enter food chains, affecting all levels from plankton to humans. Over 8 million tons of plastic enter oceans yearly.'
+          },
+          {
+            question: 'How can individuals effectively protect ocean health?',
+            options: [
+              'Dump more waste into waterways',
+              'Support overfishing of marine species',
+              'Reduce single-use plastics and support sustainable seafood',
+              'Ignore ocean conservation issues'
+            ],
+            correct: 2,
+            explanation: 'Protecting oceans requires: reducing plastic use, choosing sustainable seafood, participating in beach cleanups, supporting marine protected areas, reducing carbon footprint, and avoiding products that harm reefs like certain sunscreens.'
+          },
+          {
+            question: 'What percentage of ocean depths have been explored by humans?',
+            options: [
+              'About 80% - most of it',
+              'About 50% - half explored',
+              'About 20% - one-fifth explored',
+              'Less than 5% - we know very little'
+            ],
+            correct: 3,
+            explanation: 'Less than 5% of the world\'s oceans have been explored. We\'ve mapped more of Mars and the Moon than our ocean floor. The deep sea remains one of Earth\'s last frontiers, likely containing millions of undiscovered species.'
+          },
+          {
+            question: 'What are "dead zones" in oceans?',
+            options: [
+              'Areas with no sunlight at deep depths',
+              'Regions with very low oxygen where most marine life cannot survive',
+              'Places where all fish have been caught',
+              'Ocean areas that are frozen solid'
+            ],
+            correct: 1,
+            explanation: 'Dead zones are areas with so little oxygen (hypoxia) that most marine life cannot survive. They\'re caused by nutrient pollution from agriculture runoff, creating algae blooms that consume oxygen. There are now over 400 dead zones worldwide.'
+          },
+          {
+            question: 'How much of the world\'s oxygen is produced by ocean phytoplankton?',
+            options: [
+              'About 10% - a small amount',
+              'About 25% - one quarter',
+              'About 50-80% - majority of Earth\'s oxygen',
+              'None - only trees produce oxygen'
+            ],
+            correct: 2,
+            explanation: 'Marine phytoplankton produce 50-80% of Earth\'s oxygen through photosynthesis, more than all terrestrial plants combined. These microscopic organisms are the foundation of ocean food webs and are threatened by warming and acidification.'
+          },
+          {
+            question: 'What is the "Great Pacific Garbage Patch"?',
+            options: [
+              'A designated area for ocean waste disposal',
+              'A massive accumulation of plastic debris spanning 1.6 million km²',
+              'A natural seaweed formation',
+              'An underwater volcano waste site'
+            ],
+            correct: 1,
+            explanation: 'The Great Pacific Garbage Patch is a massive accumulation of ocean plastic debris spanning 1.6 million km² (twice the size of Texas) between Hawaii and California, containing an estimated 1.8 trillion pieces of plastic weighing 80,000 metric tons.'
+          },
+          {
+            question: 'How does overfishing affect ocean ecosystems?',
+            options: [
+              'It improves water quality for other species',
+              'It has no effect on ocean balance',
+              'It disrupts food chains and can cause ecosystem collapse',
+              'It increases fish populations through natural selection'
+            ],
+            correct: 2,
+            explanation: 'Overfishing removes key species from food webs, causing cascading effects throughout ecosystems. About 90% of large predatory fish (tuna, swordfish, sharks) have been depleted. Sustainable fishing and marine protected areas are essential for recovery.'
+          }
+        ]
+      },
+      forest: {
+        title: '🌳 Forest Guardian',
+        points: 160,
+        questions: [
+          {
+            question: 'What is deforestation and what are its main causes?',
+            options: [
+              'Planting new tree seedlings in open areas',
+              'Clearing, destroying, or degrading forests for agriculture, logging, or development',
+              'Protecting forests through conservation',
+              'Natural forest growth and expansion'
+            ],
+            correct: 1,
+            explanation: 'Deforestation is the permanent clearing of forest land. Main causes include agriculture (80%), logging, urbanization, and infrastructure. An area the size of a football field is lost every second, about 10 million hectares annually.'
+          },
+          {
+            question: 'Why are forests called the "lungs of Earth"?',
+            options: [
+              'They physically resemble human lung structures',
+              'They produce oxygen and absorb carbon dioxide through photosynthesis',
+              'They actually breathe in and out like animals',
+              'They have a pink color similar to lungs'
+            ],
+            correct: 1,
+            explanation: 'Forests are called "Earth\'s lungs" because trees absorb CO2 and release oxygen through photosynthesis, just as human lungs exchange gases. Forests produce about 28% of Earth\'s oxygen and store 45% of terrestrial carbon.'
+          },
+          {
+            question: 'Which rainforest is the largest and most biodiverse in the world?',
+            options: [
+              'Congo Rainforest in Central Africa',
+              'Amazon Rainforest in South America',
+              'Daintree Rainforest in Australia',
+              'Tongass Rainforest in Alaska'
+            ],
+            correct: 1,
+            explanation: 'The Amazon Rainforest covers 5.5 million km² across nine countries, spanning an area nearly as large as the contiguous United States. It contains 10% of all species on Earth and produces 20% of the world\'s oxygen.'
+          },
+          {
+            question: 'What is reforestation and why is it important?',
+            options: [
+              'Cutting down forests for wood products',
+              'Replanting trees in deforested or degraded areas to restore ecosystems',
+              'Building residential developments in forests',
+              'Burning forests for agricultural land'
+            ],
+            correct: 1,
+            explanation: 'Reforestation is replanting trees in areas where forests were cut down. It restores habitats, combats climate change by absorbing CO2, prevents soil erosion, protects water cycles, and supports biodiversity. It\'s crucial for reversing deforestation damage.'
+          },
+          {
+            question: 'How do forests specifically help combat climate change?',
+            options: [
+              'They release more CO2 into the atmosphere',
+              'They absorb and store carbon from the atmosphere in trees and soil',
+              'They increase global temperatures',
+              'They have no measurable effect on climate'
+            ],
+            correct: 1,
+            explanation: 'Forests are carbon sinks, absorbing CO2 from the atmosphere and storing it in biomass and soil. They store about 861 gigatons of carbon globally. Protecting existing forests and planting new ones is crucial for limiting global warming.'
+          },
+          {
+            question: 'How much of the Amazon Rainforest has been lost to deforestation?',
+            options: [
+              'Less than 5% - minimal damage',
+              'About 17-20% - significant loss',
+              'About 50% - half destroyed',
+              'Over 80% - nearly gone'
+            ],
+            correct: 1,
+            explanation: 'Approximately 17-20% of the Amazon has been deforested, mostly since 1970. Scientists warn that losing 20-25% could trigger a tipping point, transforming the rainforest into savanna and releasing massive amounts of stored carbon.'
+          },
+          {
+            question: 'What are "old-growth forests" and why are they especially valuable?',
+            options: [
+              'Forests that are very old but have no special value',
+              'Ancient forests with complex ecosystems, biodiversity, and massive carbon storage',
+              'Forests that are easy to cut down',
+              'Young forests recently planted'
+            ],
+            correct: 1,
+            explanation: 'Old-growth forests are mature, undisturbed forests (often 150+ years old) with complex structures, highest biodiversity, and maximum carbon storage. They store 3x more carbon than younger forests and take centuries to develop their unique ecosystems.'
+          },
+          {
+            question: 'How many tree species exist globally, and how many are threatened?',
+            options: [
+              'About 5,000 species with few threatened',
+              'About 10,000 species with some threats',
+              'About 60,000 species with one-third threatened',
+              'About 100,000 species with most threatened'
+            ],
+            correct: 2,
+            explanation: 'There are approximately 60,000 tree species globally, and about one-third (over 17,500 species) are threatened with extinction due to deforestation, climate change, disease, and invasive species. Trees are essential to countless other species.'
+          },
+          {
+            question: 'What is "afforestation" and how does it differ from reforestation?',
+            options: [
+              'Afforestation is removing all forests from an area',
+              'Afforestation is planting forests in areas that were NOT previously forested',
+              'Afforestation and reforestation are exactly the same',
+              'Afforestation is only planting fruit trees'
+            ],
+            correct: 1,
+            explanation: 'Afforestation creates new forests in areas that were not previously forested (like grasslands or deserts), while reforestation replants trees in areas that were recently forested. Both help combat climate change by creating carbon sinks.'
+          },
+          {
+            question: 'How do forests regulate the water cycle and prevent disasters?',
+            options: [
+              'They don\'t affect water or prevent disasters',
+              'They absorb rainfall, recharge groundwater, prevent floods and erosion',
+              'They only consume water with no benefits',
+              'They make droughts and floods worse'
+            ],
+            correct: 1,
+            explanation: 'Forest canopies intercept rainfall, roots absorb water and hold soil, preventing erosion and landslides. They recharge groundwater, regulate stream flow, and prevent floods. Deforested areas experience 2-5 times more flooding and severe erosion.'
+          }
+        ]
+      }
+    };
+
+    // Storage Functions (continued in next script section due to length)
+    
+    function saveToStorage(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+      } catch (e) {
+        console.error('Storage error:', e);
+        return false;
+      }
+    }
+
+    function loadFromStorage(key, defaultValue = []) {
+      try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch (e) {
+        console.error('Storage load error:', e);
+        return defaultValue;
+      }
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function initStorage() {
+      allRecords = loadFromStorage('ecoquest_data', []);
+      updateUI();
+    }
+
+    function updateUI() {
+      updateLeaderboard();
+      updateTasks();
+      updateSuggestions();
+      updateFeedback();
+      if (currentUserType === 'teacher') {
+        updateApprovals();
+      }
+      if (currentUser) {
+        updateChallengeStatus();
+        updateUserPoints();
+        updateUserStats();
+      }
+    }
+
+    function createRecord(record) {
+      const newRecord = { ...record, id: generateId(), timestamp: new Date().toISOString() };
+      allRecords.push(newRecord);
+      saveToStorage('ecoquest_data', allRecords);
+      updateUI();
+      return newRecord;
+    }
+
+    function updateRecord(id, updates) {
+      const index = allRecords.findIndex(r => r.id === id);
+      if (index !== -1) {
+        allRecords[index] = { ...allRecords[index], ...updates };
+        saveToStorage('ecoquest_data', allRecords);
+        updateUI();
+        return true;
+      }
+      return false;
+    }
+
+    // Update User Points Display with Animation
+    function updateUserPoints() {
+      if (currentUser) {
+        const pointsDisplay = document.getElementById('user-points-display');
+        pointsDisplay.textContent = `${currentUser.points} pts`;
+        pointsDisplay.classList.add('points-animated');
+        setTimeout(() => {
+          pointsDisplay.classList.remove('points-animated');
+        }, 500);
+      }
+    }
+
+    // Update User Stats Dashboard
+    function updateUserStats() {
+      if (!currentUser || currentUserType !== 'student') return;
+      
+      const statsContainer = document.getElementById('stats-container');
+      statsContainer.style.display = 'grid';
+      
+      const completedCount = completedChallenges.size;
+      const totalChallenges = Object.keys(challengeQuizzes).length;
+      const completionPercentage = Math.round((completedCount / totalChallenges) * 100);
+      
+      const completedTasks = allRecords.filter(r => 
+        r.record_type === 'task' && 
+        r.security_answer === 'completed' &&
+        r.profile_picture && 
+        r.profile_picture.includes(currentUser.email)
+      ).length;
+      
+      const rank = allRecords
+        .filter(r => r.record_type === 'user' && r.user_type === 'student')
+        .sort((a, b) => b.points - a.points)
+        .findIndex(u => u.id === currentUser.id) + 1;
+      
+      statsContainer.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-value">${currentUser.points}</div>
+          <div class="stat-label">Total Points</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value">${completedCount}/${totalChallenges}</div>
+          <div class="stat-label">Challenges Completed</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: ${completionPercentage}%"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value">${completedTasks}</div>
+          <div class="stat-label">Tasks Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value">#${rank}</div>
+          <div class="stat-label">Leaderboard Rank</div>
+        </div>
+      `;
+    }
+
+    // Challenge Status Update
+    function updateChallengeStatus() {
+      if (!currentUser) return;
+      
+      const completed = currentUser.completed_challenges ? currentUser.completed_challenges.split(',').filter(c => c) : [];
+      completedChallenges = new Set(completed);
+      
+      document.querySelectorAll('.challenge-card').forEach(card => {
+        const challenge = card.dataset.challenge;
+        if (completedChallenges.has(challenge)) {
+          card.classList.add('completed');
+        } else {
+          card.classList.remove('completed');
+        }
+      });
+    }
+
+    // Show Toast
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type} active`;
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3000);
+    }
+
+    // Auth Functions
+    function showAuthForm(userType) {
+      currentUserType = userType;
+      document.getElementById('login-selection').style.display = 'none';
+      document.getElementById('auth-container').classList.add('active');
+      
+      const icon = userType === 'student' ? '🎓' : '👨‍🏫';
+      const title = userType === 'student' ? 'Student Access' : 'Teacher Access';
+      
+      document.getElementById('auth-icon').textContent = icon;
+      document.getElementById('auth-title').textContent = title;
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const loginTab = document.getElementById('login-tab');
+      const registerTab = document.getElementById('register-tab');
+      
+      if (tab === 'login') {
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        registerTab.classList.add('active');
+        loginTab.classList.remove('active');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+
+    function backToSelection() {
+      document.getElementById('auth-container').classList.remove('active');
+      document.getElementById('login-selection').style.display = 'flex';
+      currentUserType = null;
+    }
+
+    // Login Handler
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const submitBtn = document.getElementById('login-submit-btn');
+      
+      if (!email || !password) {
+        showToast('⚠️ Please enter both email and password', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+      
+      // Add a small delay to show the loading state
+      setTimeout(() => {
+        const user = allRecords.find(r => 
+          r.record_type === 'user' && 
+          r.email === email && 
+          r.password === password &&
+          r.user_type === currentUserType
+        );
+        
+        if (user) {
+          currentUser = user;
+          showDashboard();
+          showToast('🎉 Login successful! Welcome back!');
+          document.getElementById('login-form').reset();
+        } else {
+          showToast('❌ Invalid credentials. Please check your email and password.', 'error');
+        }
+        
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
+      }, 500);
+    });
+
+    // Register Handler
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('register-name').value.trim();
+      const email = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value;
+      const institution = document.getElementById('register-institution').value.trim();
+      const securityAnswer = document.getElementById('register-security-answer').value.trim().toLowerCase();
+      const submitBtn = document.getElementById('register-submit-btn');
+      
+      if (!name || !email || !password || !institution || !securityAnswer) {
+        showToast('⚠️ Please fill in all required fields', 'error');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showToast('⚠️ Password must be at least 6 characters', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
+      
+      const existingUser = allRecords.find(r => r.record_type === 'user' && r.email === email);
+      if (existingUser) {
+        showToast('⚠️ Email already registered. Please login.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register';
+        return;
+      }
+      
+      const newUser = {
+        record_type: 'user',
+        user_type: currentUserType,
+        user_name: name,
+        email: email,
+        password: password,
+        institution: institution,
+        security_question: 'What is your favorite color?',
+        security_answer: securityAnswer,
+        profile_picture: '',
+        points: 0,
+        level: 1,
+        completed_challenges: '',
+        badges: ''
+      };
+      
+      createRecord(newUser);
+      showToast('✅ Account created successfully! Please login.');
+      switchAuthTab('login');
+      document.getElementById('register-form').reset();
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Register';
+    });
+
+    // Show Dashboard
+    function showDashboard() {
+      document.getElementById('auth-container').classList.remove('active');
+      document.getElementById('login-selection').style.display = 'none';
+      document.getElementById('dashboard').classList.add('active');
+      document.getElementById('nav-section').style.display = 'flex';
+      
+      const badge = currentUserType === 'student' ? '🎓' : '👨‍🏫';
+      document.getElementById('user-badge').textContent = badge;
+      document.getElementById('user-name-display').textContent = currentUser.user_name;
+      document.getElementById('user-type-display').textContent = currentUserType.toUpperCase();
+      updateUserPoints();
+      
+      document.getElementById('welcome-heading').textContent = `Welcome back, ${currentUser.user_name}! 👋`;
+      
+      const tabsContainer = document.getElementById('dashboard-tabs-container');
+      const existingApprovalsTab = document.getElementById('approvals-tab-btn');
+      if (existingApprovalsTab) existingApprovalsTab.remove();
+      
+      if (currentUserType === 'teacher') {
+        document.getElementById('task-creator').style.display = 'block';
+        document.getElementById('task-filters').style.display = 'flex';
+        const challengesTabBtn = document.getElementById('challenges-tab-btn');
+        if (challengesTabBtn) challengesTabBtn.style.display = 'none';
+        document.getElementById('stats-container').style.display = 'none';
+        
+        const approvalsTab = document.createElement('button');
+        approvalsTab.className = 'dashboard-tab';
+        approvalsTab.textContent = '✅ Approvals';
+        approvalsTab.id = 'approvals-tab-btn';
+        approvalsTab.addEventListener('click', () => switchDashboardTab('approvals'));
+        tabsContainer.insertBefore(approvalsTab, tabsContainer.children[0]);
+        
+        switchDashboardTab('tasks');
+      } else {
+        document.getElementById('task-creator').style.display = 'none';
+        document.getElementById('task-filters').style.display = 'flex';
+        const challengesTabBtn = document.getElementById('challenges-tab-btn');
+        if (challengesTabBtn) challengesTabBtn.style.display = 'block';
+        
+        switchDashboardTab('challenges');
+        updateChallengeStatus();
+        updateUserStats();
+      }
+    }
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      currentUser = null;
+      currentUserType = null;
+      completedChallenges.clear();
+      document.getElementById('dashboard').classList.remove('active');
+      document.getElementById('nav-section').style.display = 'none';
+      document.getElementById('login-selection').style.display = 'flex';
+      
+      const approvalsTabBtn = document.getElementById('approvals-tab-btn');
+      if (approvalsTabBtn) approvalsTabBtn.remove();
+      
+      showToast('👋 Logged out successfully');
+    });
+
+    // Dashboard Tabs
+    function switchDashboardTab(tabName) {
+      const tabs = document.querySelectorAll('.dashboard-tab');
+      const contents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      
+      const clickedTab = document.getElementById(`${tabName}-tab-btn`);
+      if (clickedTab) clickedTab.classList.add('active');
+      
+      const tabContent = document.getElementById(`${tabName}-tab`);
+      if (tabContent) tabContent.classList.add('active');
+    }
+
+    // Challenge Filtering
+    document.getElementById('difficulty-filter').addEventListener('change', filterChallenges);
+    document.getElementById('challenge-search').addEventListener('input', filterChallenges);
+
+    function filterChallenges() {
+      const difficulty = document.getElementById('difficulty-filter').value;
+      const search = document.getElementById('challenge-search').value.toLowerCase();
+      
+      document.querySelectorAll('.challenge-card').forEach(card => {
+        const cardDifficulty = card.dataset.difficulty;
+        const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+        const cardDescription = card.querySelector('p').textContent.toLowerCase();
+        
+        const matchesDifficulty = difficulty === 'all' || cardDifficulty === difficulty;
+        const matchesSearch = cardTitle.includes(search) || cardDescription.includes(search);
+        
+        if (matchesDifficulty && matchesSearch) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Task Filtering
+    document.getElementById('task-status-filter').addEventListener('change', updateTasks);
+
+    // Task Management
+    document.getElementById('task-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('task-title').value.trim();
+      const description = document.getElementById('task-description').value.trim();
+      const points = parseInt(document.getElementById('task-points').value);
+      const difficulty = document.getElementById('task-difficulty').value;
+      const requiresPhoto = document.getElementById('task-requires-photo').checked;
+      const submitBtn = document.getElementById('task-submit-btn');
+      
+      if (!title || !description || !points || !difficulty) {
+        showToast('⚠️ Please fill in all fields', 'error');
+        return;
+      }
+      
+      if (points < 10 || points > 500) {
+        showToast('⚠️ Points must be between 10 and 500', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating task...';
+      
+      const newTask = {
+        record_type: 'task',
+        user_type: '',
+        user_name: title,
+        email: description,
+        password: difficulty,
+        institution: currentUser.user_name,
+        security_question: requiresPhoto ? 'yes' : 'no',
+        security_answer: 'open',
+        profile_picture: '',
+        points: points,
+        level: 0,
+        completed_challenges: '',
+        badges: ''
+      };
+      
+      createRecord(newTask);
+      showToast('✅ Task created successfully!');
+      document.getElementById('task-form').reset();
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Task';
+    });
+
+    // Update Tasks
+    function updateTasks() {
+      const taskList = document.getElementById('task-list');
+      const tasks = allRecords.filter(r => r.record_type === 'task');
+      const statusFilter = document.getElementById('task-status-filter').value;
+      
+      if (tasks.length === 0) {
+        taskList.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No tasks available yet</p>';
+        return;
+      }
+      
+      let displayTasks = tasks;
+      
+      if (currentUserType === 'student' && currentUser) {
+        displayTasks = tasks.filter(t => 
+          t.security_answer === 'open' || 
+          (t.profile_picture && t.profile_picture.includes(currentUser.email))
+        );
+      }
+      
+      // Apply status filter
+      if (statusFilter !== 'all') {
+        displayTasks = displayTasks.filter(t => t.security_answer === statusFilter);
+      }
+      
+      if (displayTasks.length === 0) {
+        taskList.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No tasks match the selected filter</p>';
+        return;
+      }
+      
+      taskList.innerHTML = displayTasks.map(task => {
+        const taskTitle = task.user_name;
+        const taskDescription = task.email;
+        const taskDifficulty = task.password;
+        const assignedBy = task.institution;
+        const requiresPhoto = task.security_question === 'yes';
+        const taskPoints = task.points;
+        const taskStatus = task.security_answer;
+        const submissionData = task.profile_picture ? task.profile_picture.split('|') : [];
+        
+        let actionButton = '';
+        
+        if (currentUserType === 'student') {
+          if (taskStatus === 'open') {
+            if (requiresPhoto) {
+              actionButton = `<button class="upload-task-btn" onclick="openUploadModal('${task.id}')">📷 Upload Proof</button>`;
+            } else {
+              actionButton = `<button class="complete-task-btn" onclick="completeTaskDirectly('${task.id}')">✓ Complete Task</button>`;
+            }
+          } else if (taskStatus === 'pending') {
+            actionButton = `<span style="color: #f59e0b; font-weight: 600; font-size: 0.875rem;">⏳ Awaiting Approval</span>`;
+          }
+        }
+        
+        let submissionSection = '';
+        if (submissionData.length >= 3 && (currentUserType === 'teacher' || submissionData[1] === currentUser.email)) {
+          const photoData = submissionData.slice(3).join('|');
+          submissionSection = `
+            <div class="task-submission">
+              <p class="submission-info"><strong>📸 Submitted by:</strong> ${submissionData[0]}</p>
+              ${submissionData[2] ? `<p class="submission-info"><strong>💬 Comment:</strong> ${submissionData[2]}</p>` : ''}
+              ${photoData && photoData.length > 0 ? `
+                <div style="margin-top: 1rem;">
+                  <p class="submission-info"><strong>     Photo Proof:</strong></p>
+                  <img src="${photoData}" alt="Task proof" class="submission-photo" style="max-width: 100%; max-height: 400px; border-radius: 8px; margin-top: 0.5rem; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+        
+        return `
+          <div class="task-item ${taskStatus === 'completed' ? 'completed' : ''}">
+            <div class="task-header">
+              <h4 class="task-title">${taskTitle} ${requiresPhoto ? '📷' : ''}</h4>
+              <span class="task-status-badge ${taskStatus}">${taskStatus.replace('_', ' ').toUpperCase()}</span>
+            </div>
+            <p class="task-description">${taskDescription}</p>
+            ${submissionSection}
+            <div class="task-footer">
+              <div class="task-meta">
+                <span>👨‍🏫 ${assignedBy}</span>
+                <span>⭐ ${taskDifficulty}</span>
+                <span>🎯 ${taskPoints} pts</span>
+              </div>
+              ${actionButton}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update Approvals
+    function updateApprovals() {
+      const approvalsList = document.getElementById('approvals-list');
+      const pendingTasks = allRecords.filter(r => r.record_type === 'task' && r.security_answer === 'pending');
+      
+      if (pendingTasks.length === 0) {
+        approvalsList.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No pending submissions</p>';
+        return;
+      }
+      
+      approvalsList.innerHTML = pendingTasks.map(task => {
+        const taskTitle = task.user_name;
+        const taskDescription = task.email;
+        const taskDifficulty = task.password;
+        const taskPoints = task.points;
+        const submissionData = task.profile_picture ? task.profile_picture.split('|') : [];
+        const studentName = submissionData[0] || 'Unknown';
+        const studentEmail = submissionData[1] || '';
+        const comment = submissionData[2] || '';
+        const photoData = submissionData.slice(3).join('|');
+        
+        return `
+          <div class="task-item">
+            <div class="task-header">
+              <h4 class="task-title">${taskTitle}</h4>
+              <span class="task-status-badge pending">PENDING REVIEW</span>
+            </div>
+            <p class="task-description">${taskDescription}</p>
+            <div class="task-submission">
+              <p class="submission-info"><strong>📸 Submitted by:</strong> ${studentName} (${studentEmail})</p>
+              <p class="submission-info"><strong>🕐 Submitted:</strong> ${new Date(task.timestamp).toLocaleString()}</p>
+              ${comment ? `<p class="submission-info"><strong>💬 Comment:</strong> ${comment}</p>` : ''}
+              ${photoData ? `
+                <div style="margin-top: 1rem;">
+                  <p class="submission-info" style="margin-bottom: 0.5rem;"><strong>📷 Photo Proof:</strong></p>
+                  <img src="${photoData}" alt="Task proof" class="submission-photo" style="max-width: 100%; max-height: 300px; border-radius: 8px; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                </div>
+              ` : '<p class="submission-info" style="color: #f56565; font-weight: 600;">⚠️ No photo submitted</p>'}
+            </div>
+            <div class="task-footer">
+              <div class="task-meta">
+                <span>🎯 ${taskPoints} pts</span>
+                <span>⭐ ${taskDifficulty}</span>
+              </div>
+              <div>
+                <button class="approve-btn" onclick="approveTask('${task.id}')">✓ Approve</button>
+                <button class="reject-btn" onclick="rejectTask('${task.id}')">✗ Reject</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal Functions
+    function openUploadModal(taskId) {
+      currentTaskId = taskId;
+      document.getElementById('upload-modal').classList.add('active');
+      document.getElementById('photo-preview').style.display = 'none';
+      document.getElementById('upload-form').reset();
+    }
+    
+    function closeUploadModal() {
+      document.getElementById('upload-modal').classList.remove('active');
+      currentTaskId = null;
+    }
+
+    // Photo Preview
+    document.getElementById('photo-upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const preview = document.getElementById('photo-preview');
+          preview.src = event.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Upload Form
+    document.getElementById('upload-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const task = allRecords.find(r => r.id === currentTaskId);
+      if (!task) {
+        showToast('❌ Task not found. Please try again.', 'error');
+        return;
+      }
+      
+      const photoInput = document.getElementById('photo-upload');
+      const comment = document.getElementById('submission-comment').value || '';
+      const submitBtn = document.getElementById('upload-submit-btn');
+      
+      if (!photoInput.files[0]) {
+        showToast('⚠️ Please select a photo', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Uploading...';
+      
+      const reader = new FileReader();
+      
+      reader.onload = function(event) {
+        const photoData = event.target.result;
+        const submissionData = currentUser.user_name + '|' + currentUser.email + '|' + comment + '|' + photoData;
+        
+        updateRecord(task.id, {
+          security_answer: 'pending',
+          profile_picture: submissionData
+        });
+        
+        showToast('✅ Task submitted for approval!');
+        closeUploadModal();
+        
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit for Approval';
+      };
+      
+      reader.onerror = function() {
+        showToast('❌ Error reading photo. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit for Approval';
+      };
+      
+      reader.readAsDataURL(photoInput.files[0]);
+    });
+    
+    // Complete Task
+    function completeTaskDirectly(taskId) {
+      const task = allRecords.find(r => r.id === taskId);
+      if (!task) return;
+      
+      updateRecord(task.id, {
+        security_answer: 'completed',
+        profile_picture: currentUser.user_name + '|' + currentUser.email + '||'
+      });
+      
+      updateRecord(currentUser.id, { points: currentUser.points + task.points });
+      currentUser.points += task.points;
+      
+      showToast(`✅ Task completed! You earned ${task.points} points! 🎉`);
+    }
+    
+    // Approve Task
+    function approveTask(taskId) {
+      const task = allRecords.find(r => r.id === taskId);
+      if (!task) return;
+      
+      const submissionData = task.profile_picture ? task.profile_picture.split('|') : [];
+      const studentEmail = submissionData[1];
+      
+      const student = allRecords.find(r => 
+        r.record_type === 'user' && 
+        r.email === studentEmail
+      );
+      
+      if (!student) {
+        showToast('❌ Student not found', 'error');
+        return;
+      }
+      
+      updateRecord(task.id, { security_answer: 'completed' });
+      updateRecord(student.id, { points: student.points + task.points });
+      
+      showToast(`✅ Task approved! ${student.user_name} earned ${task.points} points! 🎉`);
+    }
+    
+    // Reject Task
+    function rejectTask(taskId) {
+      const task = allRecords.find(r => r.id === taskId);
+      if (!task) return;
+      
+      updateRecord(task.id, {
+        security_answer: 'open',
+        profile_picture: ''
+      });
+      
+      showToast('↩️ Task rejected and reopened for resubmission');
+    }
+
+    // Rating Selection
+    function selectRating(rating) {
+      document.getElementById('feedback-rating').value = rating;
+      
+      const buttons = document.querySelectorAll('.rating-btn');
+      buttons.forEach((btn, index) => {
+        if (index < rating) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    // Feedback Handler
+    document.getElementById('feedback-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const type = document.getElementById('feedback-type').value;
+      const rating = document.getElementById('feedback-rating').value;
+      const message = document.getElementById('feedback-message').value;
+      const anonymous = document.getElementById('feedback-anonymous').checked;
+      const submitBtn = document.getElementById('feedback-submit-btn');
+      
+      if (!rating) {
+        showToast('⚠️ Please select a rating', 'error');
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      
+      const newFeedback = {
+        record_type: 'feedback',
+        user_type: anonymous ? 'anonymous' : currentUserType,
+        user_name: anonymous ? 'Anonymous User' : currentUser.user_name,
+        email: type,
+        password: rating,
+        institution: message,
+        security_question: '',
+        security_answer: '',
+        profile_picture: '',
+        points: 0,
+        level: 0,
+        completed_challenges: '',
+        badges: ''
+      };
+      
+      createRecord(newFeedback);
+      showToast('✅ Thank you for your feedback!');
+      document.getElementById('feedback-form').reset();
+      document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Feedback';
+    });
+
+    // Suggestion Handler
+    document.getElementById('suggestion-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const category = document.getElementById('suggestion-category').value;
+      const text = document.getElementById('suggestion-text').value;
+      const submitBtn = document.getElementById('suggestion-submit-btn');
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      
+      const newSuggestion = {
+        record_type: 'suggestion',
+        user_type: '',
+        user_name: currentUser.user_name,
+        email: '',
+        password: '',
+        institution: '',
+        security_question: '',
+        security_answer: '',
+        profile_picture: '',
+        points: 0,
+        level: 0,
+        completed_challenges: '',
+        badges: category + '|' + text + '|pending'
+      };
+      
+      createRecord(newSuggestion);
+      showToast('✅ Suggestion submitted successfully!');
+      document.getElementById('suggestion-form').reset();
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Suggestion';
+    });
+
+    // Update Suggestions
+    function updateSuggestions() {
+      const suggestionsList = document.getElementById('suggestions-list');
+      const suggestions = allRecords.filter(r => r.record_type === 'suggestion');
+      
+      if (suggestions.length === 0) {
+        suggestionsList.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No suggestions yet. Be the first!</p>';
+        return;
+      }
+      
+      suggestionsList.innerHTML = suggestions.slice().reverse().map(s => {
+        const suggestionData = s.badges ? s.badges.split('|') : ['', '', ''];
+        const category = suggestionData[0] || 'Other';
+        const text = suggestionData[1] || 'No text';
+        const submittedBy = s.user_name || 'Anonymous';
+        
+        return `
+          <div class="suggestion-item">
+            <div class="suggestion-header">
+              <span class="suggestion-category">${category}</span>
+            </div>
+            <p class="suggestion-text">${text}</p>
+            <div class="suggestion-meta">Submitted by ${submittedBy} • ${new Date(s.timestamp).toLocaleDateString()}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update Feedback
+    function updateFeedback() {
+      const feedbackList = document.getElementById('feedback-list');
+      const feedbackItems = allRecords.filter(r => r.record_type === 'feedback');
+      
+      if (feedbackItems.length === 0) {
+        feedbackList.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No feedback yet. Be the first to share!</p>';
+        return;
+      }
+      
+      feedbackList.innerHTML = feedbackItems.slice().reverse().map(f => {
+        const type = f.email || 'General Feedback';
+        const rating = parseInt(f.password) || 0;
+        const message = f.institution || '';
+        const submittedBy = f.user_name || 'Anonymous User';
+        const userType = f.user_type === 'anonymous' ? '' : ` (${f.user_type})`;
+        
+        const stars = '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+        
+        let typeColor = '#667eea';
+        if (type === 'Technical Issue') typeColor = '#f56565';
+        else if (type === 'Compliment') typeColor = '#48bb78';
+        else if (type === 'Feature Request') typeColor = '#f59e0b';
+        
+        return `
+          <div class="suggestion-item" style="border-left: 4px solid ${typeColor};">
+            <div class="suggestion-header" style="flex-wrap: wrap;">
+              <span class="suggestion-category" style="background: ${typeColor};">${type}</span>
+              <span style="font-size: 1.25rem;">${stars}</span>
+            </div>
+            <p class="suggestion-text">${message}</p>
+            <div class="suggestion-meta">Submitted by ${submittedBy}${userType} • ${new Date(f.timestamp).toLocaleDateString()}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update Leaderboard
+    function updateLeaderboard() {
+      const leaderboardList = document.getElementById('leaderboard-list');
+      const users = allRecords.filter(r => r.record_type === 'user' && r.user_type === 'student');
+      
+      if (users.length === 0) {
+        leaderboardList.innerHTML = '<li style="text-align: center; color: #718096; padding: 2rem;">No students registered yet</li>';
+        return;
+      }
+      
+      const sortedUsers = [...users].sort((a, b) => b.points - a.points);
+      
+      leaderboardList.innerHTML = sortedUsers.slice(0, 10).map((user, index) => `
+        <li class="leaderboard-item">
+          <div class="rank">${index + 1}</div>
+          <div class="user-info-item">
+            <div class="user-name-item">${user.user_name}</div>
+            <div class="user-institution">${user.institution}</div>
+          </div>
+          <div class="user-points">${user.points} pts</div>
+        </li>
+      `).join('');
+    }
+
+    // Challenge Quiz Functions
+    function openChallengeQuiz(challengeType) {
+      const quiz = challengeQuizzes[challengeType];
+      if (!quiz) return;
+      
+      if (completedChallenges.has(challengeType)) {
+        showToast('✅ You have already completed this challenge!', 'error');
+        return;
+      }
+      
+      currentChallenge = challengeType;
+      quizAnswers = {};
+      
+      document.getElementById('challenge-modal-title').textContent = quiz.title;
+      document.getElementById('challenge-modal-subtitle').textContent = `Answer at least 80% correctly to earn ${quiz.points} points!`;
+      
+      const container = document.getElementById('challenge-quiz-container');
+      container.innerHTML = quiz.questions.map((q, index) => `
+        <div class="quiz-question">
+          <div class="question-text">${index + 1}. ${q.question}</div>
+          <div class="quiz-options">
+            ${q.options.map((option, optIndex) => `
+              <label class="quiz-option" data-question="${index}" data-answer="${optIndex}">
+                <input type="radio" name="question-${index}" value="${optIndex}">
+                <span>${option}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      document.getElementById('quiz-progress').textContent = `${quiz.questions.length} Questions • ${quiz.points} Points`;
+      document.getElementById('challenge-modal').classList.add('active');
+      
+      document.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', function() {
+          const questionIndex = this.dataset.question;
+          const answerIndex = this.dataset.answer;
+          
+          this.parentElement.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.classList.remove('selected');
+          });
+          
+          this.classList.add('selected');
+          this.querySelector('input[type="radio"]').checked = true;
+          
+          quizAnswers[questionIndex] = parseInt(answerIndex);
+        });
+      });
+    }
+
+    function closeChallengeModal() {
+      document.getElementById('challenge-modal').classList.remove('active');
+      currentChallenge = null;
+      quizAnswers = {};
+    }
+
+    function submitQuiz() {
+      const quiz = challengeQuizzes[currentChallenge];
+      if (!quiz) return;
+      
+      if (Object.keys(quizAnswers).length < quiz.questions.length) {
+        showToast('⚠️ Please answer all questions!', 'error');
+        return;
+      }
+      
+      let correctAnswers = 0;
+      const results = [];
+      
+      quiz.questions.forEach((q, index) => {
+        const isCorrect = quizAnswers[index] === q.correct;
+        if (isCorrect) correctAnswers++;
+        results.push({
+          question: q.question,
+          userAnswer: quizAnswers[index],
+          correctAnswer: q.correct,
+          isCorrect: isCorrect,
+          explanation: q.explanation
+        });
+      });
+      
+      const percentage = (correctAnswers / quiz.questions.length) * 100;
+      const passed = percentage >= 80;
+      
+      const container = document.getElementById('challenge-quiz-container');
+      
+      if (passed) {
+        updateRecord(currentUser.id, { 
+          points: currentUser.points + quiz.points,
+          completed_challenges: currentUser.completed_challenges ? 
+            currentUser.completed_challenges + ',' + currentChallenge : 
+            currentChallenge
+        });
+        currentUser.points += quiz.points;
+        currentUser.completed_challenges = currentUser.completed_challenges ? 
+          currentUser.completed_challenges + ',' + currentChallenge : 
+          currentChallenge;
+        
+        completedChallenges.add(currentChallenge);
+        updateChallengeStatus();
+        
+        container.innerHTML = `
+          <div class="quiz-result">
+            <div class="quiz-result-icon">🎉</div>
+            <h3>Congratulations!</h3>
+            <p>You passed the challenge!</p>
+            <div class="quiz-score">${correctAnswers}/${quiz.questions.length} Correct (${Math.round(percentage)}%)</div>
+            <p style="font-size: 1.25rem; color: #48bb78; font-weight: 600;">+${quiz.points} Points Earned! 🏆</p>
+            <div class="explanation-section">
+              <div class="explanation-title">💡 Key Takeaways</div>
+              <div class="explanation-text">
+                ${results.map((r, i) => 
+                  `<p style="margin-bottom: 1rem;"><strong>Q${i + 1}:</strong> ${r.explanation}</p>`
+                ).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.getElementById('submit-quiz-btn').textContent = 'Close';
+        document.getElementById('submit-quiz-btn').onclick = closeChallengeModal;
+        document.getElementById('quiz-progress').textContent = '';
+        
+        showToast(`🎉 Challenge completed! +${quiz.points} points!`);
+      } else {
+        container.innerHTML = `
+          <div class="quiz-result">
+            <div class="quiz-result-icon">📚</div>
+            <h3>Keep Learning!</h3>
+            <p>You need 80% or higher to pass.</p>
+            <div class="quiz-score">${correctAnswers}/${quiz.questions.length} Correct (${Math.round(percentage)}%)</div>
+            <p style="color: #718096; margin-bottom: 1.5rem;">Review the explanations below and try again!</p>
+            <div class="explanation-section">
+              <div class="explanation-title">📖 Learning Points</div>
+              <div class="explanation-text">
+                ${results.map((r, i) => 
+                  `<p style="margin-bottom: 1rem;">
+                    <strong>Q${i + 1} ${r.isCorrect ? '✓' : '  '}:</strong> ${r.explanation}
+                  </p>`
+                ).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.getElementById('submit-quiz-btn').textContent = 'Try Again';
+        document.getElementById('submit-quiz-btn').onclick = () => {
+          closeChallengeModal();
+          setTimeout(() => openChallengeQuiz(currentChallenge), 300);
+        };
+        document.getElementById('quiz-progress').textContent = '';
+      }
+    }
+
+    // Password Reset Handler
+    let resetUserEmail = null;
+
+    function openPasswordResetModal() {
+      document.getElementById('password-reset-modal').classList.add('active');
+      document.getElementById('password-reset-form').reset();
+      document.getElementById('new-password-group').style.display = 'none';
+      document.getElementById('confirm-password-group').style.display = 'none';
+      document.getElementById('password-reset-submit-btn').textContent = 'Verify Identity';
+      resetUserEmail = null;
+    }
+
+    function closePasswordResetModal() {
+      document.getElementById('password-reset-modal').classList.remove('active');
+      resetUserEmail = null;
+    }
+
+    document.getElementById('password-reset-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('password-reset-submit-btn');
+      
+      if (!resetUserEmail) {
+        // Step 1: Verify identity
+        const email = document.getElementById('reset-email').value.trim();
+        const securityAnswer = document.getElementById('reset-security-answer').value.trim().toLowerCase();
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verifying...';
+        
+        const user = allRecords.find(r => 
+          r.record_type === 'user' && 
+          r.email === email &&
+          r.user_type === currentUserType
+        );
+        
+        if (!user) {
+          showToast('❌ Email not found. Please check and try again.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Verify Identity';
+          return;
+        }
+        
+        if (!user.security_answer || user.security_answer !== securityAnswer) {
+          showToast('❌ Security answer is incorrect. Please try again.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Verify Identity';
+          return;
+        }
+        
+        // Identity verified, show password reset fields
+        resetUserEmail = email;
+        document.getElementById('new-password-group').style.display = 'block';
+        document.getElementById('confirm-password-group').style.display = 'block';
+        document.getElementById('reset-email').disabled = true;
+        document.getElementById('reset-security-answer').disabled = true;
+        submitBtn.textContent = 'Reset Password';
+        submitBtn.disabled = false;
+        showToast('✅ Identity verified! Please enter your new password.');
+        
+      } else {
+        // Step 2: Reset password
+        const newPassword = document.getElementById('reset-new-password').value;
+        const confirmPassword = document.getElementById('reset-confirm-password').value;
+        
+        if (!newPassword || !confirmPassword) {
+          showToast('⚠️ Please enter and confirm your new password', 'error');
+          return;
+        }
+        
+        if (newPassword.length < 6) {
+          showToast('⚠️ Password must be at least 6 characters', 'error');
+          return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+          showToast('❌ Passwords do not match. Please try again.', 'error');
+          return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Resetting...';
+        
+        const user = allRecords.find(r => 
+          r.record_type === 'user' && 
+          r.email === resetUserEmail
+        );
+        
+        if (user) {
+          updateRecord(user.id, { password: newPassword });
+          showToast('✅ Password reset successfully! You can now login with your new password.');
+          closePasswordResetModal();
+          switchAuthTab('login');
+        } else {
+          showToast('❌ An error occurred. Please try again.', 'error');
+        }
+        
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Reset Password';
+      }
+    });
+
+    // Create Default Environmental Tasks
+    function createDefaultTasks() {
+      const defaultTasks = [
+        {
+          title: '🌱 Water Plants in Your Area',
+          description: 'Water at least 5 plants in your home, school, or neighborhood. Take a photo showing you watering the plants.',
+          points: 50,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🧹 Clean Your Surroundings',
+          description: 'Clean up litter from your street, park, or school grounds. Collect at least one bag of trash and take a photo of your cleanup effort.',
+          points: 80,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🌳 Plant a Tree',
+          description: 'Plant a tree sapling in your garden, school, or community area. Take a photo of the planted tree with you beside it.',
+          points: 150,
+          difficulty: 'Intermediate',
+          requiresPhoto: true
+        },
+        {
+          title: '♻️ Create a Compost Bin',
+          description: 'Set up a small compost bin at home for organic waste. Take a photo of your compost setup with some organic materials.',
+          points: 120,
+          difficulty: 'Intermediate',
+          requiresPhoto: true
+        },
+        {
+          title: '🚰 Save Water Challenge',
+          description: 'Track and reduce your water usage for 3 days. Turn off taps while brushing, take shorter showers. Share your experience and water-saving tips.',
+          points: 100,
+          difficulty: 'Intermediate',
+          requiresPhoto: false
+        },
+        {
+          title: '🔋 Unplug Electronics',
+          description: 'For one week, unplug all electronics and chargers when not in use. Document your energy-saving efforts with photos of unplugged devices.',
+          points: 90,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🛍️ Use Reusable Bags',
+          description: 'Use reusable shopping bags for all purchases for one month. Take photos of yourself using reusable bags at different stores.',
+          points: 70,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🌻 Create a Pollinator Garden',
+          description: 'Plant flowers that attract bees and butterflies. Create a small pollinator-friendly garden and photograph the planted flowers.',
+          points: 140,
+          difficulty: 'Advanced',
+          requiresPhoto: true
+        },
+        {
+          title: '🏞️ Organize a Beach/Park Cleanup',
+          description: 'Organize and lead a cleanup event at a local beach or park with friends. Take photos of the team and collected waste.',
+          points: 200,
+          difficulty: 'Advanced',
+          requiresPhoto: true
+        },
+        {
+          title: '📚 Educate Others About Climate',
+          description: 'Create and deliver a presentation about climate change to your class or community. Share photos or a summary of your presentation.',
+          points: 180,
+          difficulty: 'Advanced',
+          requiresPhoto: true
+        },
+        {
+          title: '🚲 Bike/Walk Instead of Drive',
+          description: 'Use a bicycle or walk instead of taking a car for one week. Track your trips and share photos of your eco-friendly commutes.',
+          points: 110,
+          difficulty: 'Intermediate',
+          requiresPhoto: true
+        },
+        {
+          title: '🍃 Start a Herb Garden',
+          description: 'Grow herbs like basil, mint, or coriander at home. Take photos showing the growth progress of your herb garden.',
+          points: 85,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🦋 Build a Bird Feeder',
+          description: 'Create a bird feeder from recycled materials and install it in your garden or balcony. Photograph birds visiting your feeder.',
+          points: 95,
+          difficulty: 'Intermediate',
+          requiresPhoto: true
+        },
+        {
+          title: '💡 Switch to LED Bulbs',
+          description: 'Replace at least 3 traditional bulbs with energy-efficient LED bulbs at home. Take before and after photos of the bulbs.',
+          points: 75,
+          difficulty: 'Beginner',
+          requiresPhoto: true
+        },
+        {
+          title: '🌾 Reduce Food Waste',
+          description: 'For 2 weeks, plan meals to minimize food waste. Keep a log and share your strategies with photos of planned meals.',
+          points: 105,
+          difficulty: 'Intermediate',
+          requiresPhoto: false
+        }
+      ];
+      
+      // Check if default tasks already exist
+      const existingTasks = allRecords.filter(r => r.record_type === 'task');
+      
+      // Only create if there are fewer than 5 tasks
+      if (existingTasks.length < 5) {
+        defaultTasks.forEach(task => {
+          const newTask = {
+            record_type: 'task',
+            user_type: '',
+            user_name: task.title,
+            email: task.description,
+            password: task.difficulty,
+            institution: 'EcoQuest Platform',
+            security_question: task.requiresPhoto ? 'yes' : 'no',
+            security_answer: 'open',
+            profile_picture: '',
+            points: task.points,
+            level: 0,
+            completed_challenges: '',
+            badges: ''
+          };
+          createRecord(newTask);
+        });
+        showToast('🌍 Environmental tasks loaded successfully!');
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      initStorage();
+      createDefaultTasks();
+      
+      document.getElementById('student-btn').addEventListener('click', () => showAuthForm('student'));
+      document.getElementById('teacher-btn').addEventListener('click', () => showAuthForm('teacher'));
+      
+      document.getElementById('login-tab').addEventListener('click', () => switchAuthTab('login'));
+      document.getElementById('register-tab').addEventListener('click', () => switchAuthTab('register'));
+      
+      document.getElementById('back-to-selection-btn').addEventListener('click', backToSelection);
+      
+      document.getElementById('forgot-password-btn').addEventListener('click', openPasswordResetModal);
+      document.getElementById('close-password-reset-modal').addEventListener('click', closePasswordResetModal);
+      
+      document.getElementById('challenges-tab-btn').addEventListener('click', () => switchDashboardTab('challenges'));
+      document.getElementById('tasks-tab-btn').addEventListener('click', () => switchDashboardTab('tasks'));
+      document.getElementById('leaderboard-tab-btn').addEventListener('click', () => switchDashboardTab('leaderboard'));
+      document.getElementById('suggestions-tab-btn').addEventListener('click', () => switchDashboardTab('suggestions'));
+      document.getElementById('feedback-tab-btn').addEventListener('click', () => switchDashboardTab('feedback'));
+      
+      document.querySelectorAll('.challenge-card').forEach(card => {
+        card.addEventListener('click', function() {
+          if (currentUserType === 'student') {
+            const challenge = this.dataset.challenge;
+            openChallengeQuiz(challenge);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.rating-btn').forEach((btn, index) => {
+        btn.addEventListener('click', () => selectRating(index + 1));
+      });
+      
+      document.getElementById('close-upload-modal').addEventListener('click', closeUploadModal);
+      document.getElementById('close-challenge-modal').addEventListener('click', closeChallengeModal);
+      document.getElementById('submit-quiz-btn').addEventListener('click', submitQuiz);
+    });
+
+    // Global Functions
+    window.openUploadModal = openUploadModal;
+    window.completeTaskDirectly = completeTaskDirectly;
+    window.approveTask = approveTask;
+    window.rejectTask = rejectTask;
+    window.selectRating = selectRating;
+    window.openChallengeQuiz = openChallengeQuiz;
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a79fc46d7b89147',t:'MTc2NDY2OTcxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
